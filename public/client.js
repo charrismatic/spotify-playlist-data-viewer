@@ -13,7 +13,7 @@ $(function() {
     console.groupEnd();
     
     // Display the track name and artist name
-    var trackName = $('<a href="'"<h3>' + data.name + ' by ' + data.artists[0].name + '</h3>');
+    var trackName = $('<a href="' + data.external_urls.spotify + '" style="color:white;text-decoration:underline;"><h3>' + data.name + ' by ' + data.artists[0].name + '</h3></a>');
     trackName.appendTo('#search-track-container');
     
     // Display the album art
@@ -43,7 +43,7 @@ $(function() {
     console.groupEnd();
     
     // The audio features we want to show
-    var keys = ["danceability", "energy", "acousticness"]
+    var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
     
     // Display the audio features
     keys.map(function(key, i) {
@@ -67,6 +67,14 @@ $(function() {
     
     // Display the artist name
     var trackName = $('<h3>' + data.name + '</h3>');
+    trackName.appendTo('#artist-container');
+    
+    // Display the artist's popularity
+    var trackName = $('<h3>Popularity: ' + data.popularity + '</h3>');
+    trackName.appendTo('#artist-container');
+    
+    // Display the artist's follower count
+    var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
     trackName.appendTo('#artist-container');
     
     // Display the artist's genres

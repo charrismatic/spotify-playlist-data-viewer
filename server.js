@@ -63,7 +63,7 @@ app.get('/category-playlists', function (request, response) {
   
   // Get playlists from a browse category
   // Find out which categories are available here: https://beta.developer.spotify.com/console/get-browse-categories/
-  spotifyApi.getPlaylistsForCategory('jazz', { limit : 5 })
+  spotifyApi.getPlaylistsForCategory('holidays', { limit : 10, country: 'SE' })
     .then(function(data) {
     
     // Send the list of playlists
@@ -75,7 +75,7 @@ app.get('/category-playlists', function (request, response) {
 });
 
 app.get('/audio-features', function (request, response) {
-  spotifyApi.getAudioFeaturesForTrack('4uLU6hMCjMI75M1A2tKUQC')
+  spotifyApi.getAudioFeaturesForTrack('7oK9VyNzrYvRFo7nQEYkWN')
     .then(function(data) {
     
       response.send(data.body);
@@ -86,7 +86,7 @@ app.get('/audio-features', function (request, response) {
 });
 
 app.get('/artist', function (request, response) {
-  spotifyApi.getArtist('6jJ0s89eD6GaHleKKya26X')
+  spotifyApi.getArtist('7oPftvlwr6VrsViSDV7fJY')
     .then(function(data) {
     
       // Send the list of tracks
@@ -98,7 +98,7 @@ app.get('/artist', function (request, response) {
 });
 
 app.get('/artist-top-tracks', function (request, response) {
-  spotifyApi.getArtistTopTracks('0LcJLqbBmaGUft1e9Mm8HV', 'SE')
+  spotifyApi.getArtistTopTracks('0uq5PttqEjj3IH1bzwcrXF', 'US')
     .then(function(data) {
     
       // Send the list of tracks
