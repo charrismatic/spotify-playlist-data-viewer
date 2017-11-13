@@ -12,8 +12,8 @@ $(function() {
     console.log(data);
     console.groupEnd();
     
-    // Display the track name
-    var trackName = $('<h3>' + data.name + '</h3>');
+    // Display the track name and artist name
+    var trackName = $('<a href="'"<h3>' + data.name + ' by ' + data.artists[0].name + '</h3>');
     trackName.appendTo('#search-track-container');
     
     // Display the album art

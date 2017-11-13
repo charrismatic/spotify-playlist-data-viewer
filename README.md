@@ -25,9 +25,9 @@ This app uses the *Client Credentials Flow* for authentication, which means you 
 
 #### Pink: Search for a Track
 
-1. Change the song that shows up. *(Hint: look in server.js for the API call)*
+[1. Change the song that shows up. *(Hint: look in server.js for the API call)*](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:51:48)
 
-2. Display the artist name in addition to the song name. *(Hint: look at the whole track object to find the artist name)*
+[2. Display the artist name in addition to the song name. *(Hint: look at the whole track object to find the artist name)*](https://glitch.com/edit/#!/spotify-playground-solutions?path=public/client.js:16:72)
 
 3. Make the title link to the song on Spotify. *(Hint: look at the whole track object to find the song URL)*
 
