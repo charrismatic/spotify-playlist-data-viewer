@@ -108,12 +108,12 @@ $(function() {
     console.groupEnd();
     
     // Display the user's image
-    var img = $('<img class="circle-image" />');
-    img.attr('src', data.images[0].url);
+    var img = $('<div class="circle-image"></div>');
+    img.attr('style', 'background:url(' + data.images[0].url + ') center/cover;height:300px;width:300px;');
     img.appendTo('#user-container');
     
     // Display the user id
-    var trackName = $('<h3>' + data.id + '</h3>');
+    var trackName = $('<a href="' + data.external_urls.spotify + '" style="color:white;text-decoration:underline;"><h3>' + data.id + '</h3></a>');
     trackName.appendTo('#user-container');
     
     // Display the user's follower count

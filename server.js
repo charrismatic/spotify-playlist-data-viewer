@@ -115,6 +115,7 @@ app.get('/user', function (request, response) {
   spotifyApi.getUser('arirawr')
     .then(function(data) {
     
+      // Send the user object
       response.send(data.body);
     
     }, function(err) {
