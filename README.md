@@ -61,11 +61,11 @@ This app uses the *Client Credentials Flow* for authentication, which means you 
 
 [1. Whose top tracks are these?](https://)
 
-[2. Get the top tracks of another artist.]()
+[2. Get the top tracks of another artist.](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:102:33)
 
-[3. Top Tracks vary by country. Which country are these top tracks for? Show the top tracks in another country.]()
+[3. Top Tracks vary by country. Which country are these top tracks for? Show the top tracks in another country.](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:102:59)
 
 ### Bonus!
 
-Use a different endpoint to get totally different data! *(Hint: look at [this repository](https://github.com/thelinmichael/spotify-web-api-node/) for examples of all the calls you can make)*
+[Use a different endpoint to get totally different data!](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:113:0)
 
