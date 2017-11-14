@@ -1,5 +1,7 @@
-Spotify Playground
+Spotify Playground: Solutions
 =========================
+
+## These are some possible solutions to the [Spotify Playground](https://spotify-playground.glitch.me)
 
 Written by [Arielle Vaniderstine](https://twitter.com/imariari)
 
@@ -25,17 +27,17 @@ This app uses the *Client Credentials Flow* for authentication, which means you 
 
 #### Pink: Search for a Track
 
-[1. Change the song that shows up. *(Hint: look in server.js for the API call)*](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:51:48)
+[1. Change the song that shows up.](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:51:48)
 
-[2. Display the artist name in addition to the song name. *(Hint: look at the whole track object to find the artist name)*](https://glitch.com/edit/#!/spotify-playground-solutions?path=public/client.js:16:72)
+[2. Display the artist name in addition to the song name.](https://glitch.com/edit/#!/spotify-playground-solutions?path=public/client.js:20:4)
 
-3. Make the title link to the song on Spotify. *(Hint: look at the whole track object to find the song URL)*
+[3. Make the title link to the song on Spotify.](https://glitch.com/edit/#!/spotify-playground-solutions?path=public/client.js:16:36)
 
 #### Purple: Get a Category's Playlists
 
-1. Get the playlists for a different category! You can find other categories [here](https://beta.developer.spotify.com/console/get-browse-categories/)
+[1. Get the playlists for a different category!](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:66:38)
 
-2. Show 10 playlists instead of 5.
+[2. Show 10 playlists instead of 5.]()
 
 3. Different playlists are shown to users in different countries. Show the playlists from another country.
 

@@ -12,9 +12,13 @@ $(function() {
     console.log(data);
     console.groupEnd();
     
-    // Display the track name and artist name
-    var trackName = $('<a href="' + data.external_urls.spotify + '" style="color:white;text-decoration:underline;"><h3>' + data.name + ' by ' + data.artists[0].name + '</h3></a>');
+    // Display the track name
+    var trackName = $('<a href="' + data.external_urls.spotify + '" style="color:white;text-decoration:underline;"><h3>' + data.name + '</h3></a>');
     trackName.appendTo('#search-track-container');
+    
+    // Display the artist name
+    var artistName = $('<h3>by ' + data.artists[0].name + '</h3>');
+    artistName.appendTo('#search-track-container');
     
     // Display the album art
     var img = $('<img/>');
