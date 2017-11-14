@@ -110,6 +110,18 @@ app.get('/artist-top-tracks', function (request, response) {
     });
 });
 
+app.get('/user', function (request, response) {
+  
+  spotifyApi.getUser('arirawr')
+    .then(function(data) {
+    
+      response.send(data.body);
+    
+    }, function(err) {
+      console.error(err);
+    });
+});
+
 
 //-------------------------------------------------------------//
 //------------------------ WEB SERVER -------------------------//

@@ -100,5 +100,25 @@ $(function() {
       trackName.appendTo('#top-tracks-container');
     });
   });
+  
+  $.get('/user', function(data) {
+    // "Data" is the object we get from the API. See server.js for the function that returns it.
+    console.group('%cResponse from /user', 'color: #F037A5; font-size: large');
+    console.log(data);
+    console.groupEnd();
+    
+    // Display the user's image
+    var img = $('<img class="circle-image" />');
+    img.attr('src', data.images[0].url);
+    img.appendTo('#user-container');
+    
+    // Display the user id
+    var trackName = $('<h3>' + data.id + '</h3>');
+    trackName.appendTo('#user-container');
+    
+    // Display the user's follower count
+    var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
+    trackName.appendTo('#user-container');
+  });
 
 });
