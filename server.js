@@ -78,6 +78,7 @@ app.get('/audio-features', function (request, response) {
   spotifyApi.getAudioFeaturesForTrack('7oK9VyNzrYvRFo7nQEYkWN')
     .then(function(data) {
     
+      // Send the audio features object
       response.send(data.body);
     
     }, function(err) {

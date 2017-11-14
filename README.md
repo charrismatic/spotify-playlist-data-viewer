@@ -37,9 +37,9 @@ This app uses the *Client Credentials Flow* for authentication, which means you 
 
 [1. Get the playlists for a different category!](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:66:38)
 
-[2. Show 10 playlists instead of 5.]()
+[2. Show 10 playlists instead of 5.](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:66:59)
 
-3. Different playlists are shown to users in different countries. Show the playlists from another country.
+[3. Different playlists are shown to users in different countries. Show the playlists from another country.](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:66:73)
 
 #### Orange: Get Audio Features for a Track
 
