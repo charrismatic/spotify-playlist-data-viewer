@@ -43,27 +43,27 @@ This app uses the *Client Credentials Flow* for authentication, which means you 
 
 #### Orange: Get Audio Features for a Track
 
-1. What track are these audio features for?
+[1. What track are these audio features for?](https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC)
 
-2. There are more audio features available. Display 2 more features.
+[2. There are more audio features available. Display 2 more features.](https://glitch.com/edit/#!/spotify-playground-solutions?path=public/client.js:50:58)
 
-3. Get the audio features for another track.
+[3. Get the audio features for another track.](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:78:39)
 
 #### Blue: Get an Artist
 
-1. Get another artist.
+[1. Get another artist.](https://glitch.com/edit/#!/spotify-playground-solutions?path=server.js:90:24)
 
-2. Show the popularity value for the artist.
+[2. Show the popularity value for the artist.](https://glitch.com/edit/#!/spotify-playground-solutions?path=public/client.js:77:43)
 
-3. Show the number of followers the artist has.
+[3. Show the number of followers the artist has.](https://glitch.com/edit/#!/spotify-playground-solutions?path=public/client.js:81:42)
 
 #### Yellow: Get an Artist's Top Tracks
 
-1. Whose top tracks are these?
+[1. Whose top tracks are these?](https://)
 
-2. Get the top tracks of another artist.
+[2. Get the top tracks of another artist.]()
 
-3. Top Tracks vary by country. Which country are these top tracks for? Show the top tracks in another country.
+[3. Top Tracks vary by country. Which country are these top tracks for? Show the top tracks in another country.]()
 
 ### Bonus!
 
