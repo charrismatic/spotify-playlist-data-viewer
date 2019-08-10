@@ -1,7 +1,3 @@
- /* globals Spotify */
-// client-side js
-// run by the browser each time your view template is loaded
-
 var player;
 
 const LOCALSTORAGE_ACCESS_TOKEN_KEY = 'spotify-audio-analysis-playback-token';
@@ -58,15 +54,16 @@ function binaryIndexOf(searchElement, valueof, valueout) {
 
 const getCurrentAndLastArrayLikes = (arrayLikes, time) => arrayLikes
   .map(arrayLike =>
-       binaryIndexOf.call(arrayLike,
-                          time,
-                          e => e.start,
-                          (element, index, array) => ([
-                            array[index],
-                            array[index > 0 ?
-                                  index - 1 :
-                                  0]
-                          ])));
+       binaryIndexOf.call(
+          arrayLike,
+          time,
+          e => e.start,
+          (element, index, array) => ([
+            array[index],
+            array[index > 0 ?
+                  index - 1 :
+                  0]
+          ])));
 
 const getRowPosition =
       index => index === 0 ? 0 : 1 / index + getRowPosition(index-1);

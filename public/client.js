@@ -1,25 +1,10 @@
 
 function drawFeatures(data) {
+  const labels = data.labels;
+  const values = data.values;
+  const ctx = data.ctx;
   
-}
-
-function getFeatures(id) {
-  let query = '/features?id=' + id;
-  $.get(query, function(data) {
-    let labels = [];
-    let values = [];
-    
-    for (var feature in data) {
-      if (data.hasOwnProperty(feature) && feature !== 'key' && feature !== 'mode') {
-        if(data[feature] <= 1 && data[feature] >= 0) {
-          labels.push(feature);
-          values.push(data[feature]);
-        }
-      }
-    }
-  
-    var ctx = $('#ft-'+id+'.features-chart');
-    var myChart = new Chart(ctx, {
+      var myChart = new Chart(ctx, {
         type: 'horizontalBar',
         backgroundColor: '#000000',
          data: {        
@@ -94,6 +79,34 @@ function getFeatures(id) {
           }
         }
       });
+}
+
+function getFeatures(id) {
+  let query = '/features?id=' + id;
+  
+  $.get(query, function(data) {
+    let _labels = [];
+    let _values = [];
+    
+    for (var feature in data) {
+      if (data.hasOwnProperty(feature) && feature !== 'key' && feature !== 'mode') {
+        if(data[feature] <= 1 && data[feature] >= 0) {
+          _labels.push(feature);
+          _values.push(data[feature]);
+        }
+      }
+    }
+
+    const chart_selector = `#ft-${id}.features-chart`;
+    const _chart = document.querySelector(chart_selector);
+
+    drawFeatures({
+      labels: _labels,
+      values: _values,
+      ctx: _chart,
+    });
+    
+
   });
 }
 
@@ -125,6 +138,7 @@ function drawAnalysis(_track) {
     while (minIndex <= maxIndex) {
       currentIndex = (minIndex + maxIndex) / 2 | 0;
       currentElement = valueof(this[currentIndex]);
+
       if (currentElement < searchElement && ((currentIndex + 1 < this.length) 
           ? valueof(this[currentIndex+1]) : Infinity) > searchElement) {
         return valueout(currentElement, currentIndex, this);
@@ -145,19 +159,20 @@ function drawAnalysis(_track) {
     var chart = clickEvent.target;
     const time = (clickEvent.offsetX / chart.width) * data.track.duration * 2;
     const kind = getFloorRowPosition(clickEvent.offsetY * 2 , rowHeight);
-    const seekTime = binaryIndexOf.call(  
-      arrayLikes[kind], 
-      time, 
-      e => e.start, 
-      (element, index) => element
-    );
+
+//     const seekTime = binaryIndexOf.call(  
+//       arrayLikes[kind], 
+//       time, 
+//       e => e.start, 
+//       (element, index) => element
+//     );
     
-    fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${Math.floor(seekTime*1000)}`, {
-      method: "PUT",
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    }).catch(console.log);
+    // fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${Math.floor(seekTime*1000)}`, {
+    //   method: "PUT",
+    //   headers: {
+    //     'Authorization': `Bearer ${accessToken}`
+    //   }
+    // }).catch(console.log);
   }
   
   const getCurrentAndLastArrayLikes = (arrayLikes, time) => {
@@ -177,8 +192,6 @@ function drawAnalysis(_track) {
     ? i : getFloorRowPosition(searchPosition, rowHeight, i+1, max);
   
   const chart_selector = `#an-${id}.analysis-chart`;
-  console.log('chart_selector');
-  console.log(chart_selector);
   const analysisChart = document.querySelector(chart_selector);
   
   analysisChart.style.width = analysisChart.offsetWidth;
@@ -322,7 +335,7 @@ function getTrackHtml(track) {
   <p id="features"></p>
   <div id="charts-container">
     <canvas id="ft-${track.id}" class="features-chart" width="400" height="150"></canvas>
-    <canvas id="an-${track.id}" class="analysis-chart" width="400" height="150"></canvas>
+    <canvas id="an-${track.id}" class="analysis-chart" width="300" height="150"></canvas>
   </div>
   </section>`;
   return output;
