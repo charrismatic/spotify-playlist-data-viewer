@@ -148,6 +148,12 @@ app.get("/features", function (request, response) {
   });
 });
 
+const reAuthenticateOnFailure = (action) => {
+  action(() => {
+    authenticate(action);
+  })
+}
+
 
 app.get("/analysis", function (request, response) {
   reAuthenticateOnFailure((failure) => {
