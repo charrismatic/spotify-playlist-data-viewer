@@ -47,6 +47,10 @@ $(function() {
     console.log(data);
     console.groupEnd();
     
+    var playlist_id = '4VDQkvZhZbpuXKLiS99yk7'
+    var options = {};''
+    var  callback
+    
     // Display the tracks of the playlists
     data.items.map(function(playlist, i) {
       var row = $('<div class="playlist-track"/>');
