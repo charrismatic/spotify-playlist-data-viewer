@@ -66,27 +66,6 @@ function getFeatures(id) {
   });
 }
 
-$(function() {
-  $.get('/search-track', function(data) {
-    // "Data" is the object we get from the API. See server.js for the function that returns it.
-    console.group('%cResponse from /search-track', 'color: #F037A5; font-size: large');
-    console.log(data);
-    console.groupEnd();
-    
-    // Display the track name
-    var trackName = $('<a href="' + data.external_urls.spotify + '" style="color:white;text-decoration:underline;"><h3>' + data.name + '</h3></a>');
-    trackName.appendTo('#search-track-container');
-    
-    // Display the artist name
-    var artistName = $('<h3>by ' + data.artists[0].name + '</h3>');
-    artistName.appendTo('#search-track-container');
-    
-    // Display the album art
-    var img = $('<img/>');
-    img.attr('src', data.album.images[0].url);
-    img.appendTo('#search-track-container');
-  });
-  
   $.get('/category-playlists', function(data) {
     // "Data" is the object we get from the API. See server.js for the function that returns it.
     console.group('%cResponse from /category-playlists', 'color: #F037A5; font-size: large');
@@ -101,21 +80,28 @@ $(function() {
     });
   });
   
-  
-  function formatTrack(track){
-    album
-    name
-    artists
-    popularity
-    id
-    preview_url
-    href
-    explicit
-    duration_ms
-    uri
-
+  function flattenArtists(artists){
+    var result = [];
+    artists.forEach(function (artist) {
+      result.push(artist.name);
+    });
+    return result.join(', ');
   }
-  
+
+  function flattenTrack(track) {
+    return {
+      album :       track.album.name,
+      name:         track.name,
+      artists:      flattenArtists(track.artists),
+      popularity:   track.popularity,
+      id:           track.id,
+      preview_url:  track.preview_url,
+      href:         track.href,
+      explicit :    track.explicit,
+      duration_ms:  track.duration_ms,
+      uri:          track.uri,
+    };
+  }
   
   $.get('/playlists-tracks', function(data) {
     // "Data" is the object we get from the API. See server.js for the function that returns it.
@@ -129,9 +115,9 @@ $(function() {
     
     // Display the tracks of the playlists
     data.items.map(function(item, i) {
-      var track = item.track;      
+      var track = flattenTrack(item.track);
       var row_content = `track: ${track.name} <br/>`;
-      var row_content = row_content + `artists: ${JSON.stringify(track.artists)}<br/>`;
+      var row_content = row_content + `artists: ${track.artists}<br/>`;
       var row_content = row_content + `popularity: ${track.popularity}<br/>`;
 
       var row_inner = `<div class="track-details"><p>${row_content}</p></div>`;      
@@ -228,5 +214,3 @@ $(function() {
     var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
     trackName.appendTo('#user-container');
   });
-
-});
