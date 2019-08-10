@@ -1,6 +1,96 @@
 // client-side js
 // run by the browser each time your view template is loaded
 
+
+// client-side js
+// run by the browser each time your view template is loaded
+function getFeatures(id) {
+  let query = '/features?id=' + id;
+
+  $.get(query, function(data) {
+    let labels = [];
+    let values = [];
+    
+    for (var feature in data) {
+      if (data.hasOwnProperty(feature) && feature !== 'key' && feature !== 'mode') {
+        if(data[feature] <= 1 && data[feature] >= 0) {
+          labels.push(feature);
+          values.push(data[feature]);
+        }
+      }
+    }
+  
+    var ctx = $(`$#{id}.features-chart`);
+    
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: [
+                    'rgba(30,215,96, 0.2)',
+                    'rgba(245,115,160, 0.2)',
+                    'rgba(80,155,245, 0.2)',
+                    'rgba(255,100,55, 0.2)',
+                    'rgba(180,155,200, 0.2)',
+                    'rgba(250,230,45, 0.2)',
+                    'rgba(0,100,80, 0.2)',
+                    'rgba(175,40,150, 0.2)',
+                    'rgba(30,50,100, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(30,215,96, 1)',
+                    'rgba(245,115,160, 1)',
+                    'rgba(80,155,245, 1)',
+                    'rgba(255,100,55, 1)',
+                    'rgba(180,155,200, 1)',
+                    'rgba(250,230,45, 1)',
+                    'rgba(0,100,80, 1)',
+                    'rgba(175,40,150, 1)',
+                    'rgba(30,50,100, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            legend: {
+              display: false
+           },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true,
+                        max: 1
+                    }
+                }]
+            }
+        }
+    });
+  });
+}
+
+$(function() {
+  let trackID = '';
+  let searchQuery = '';
+  let resultIDs = [];
+  
+  $('form').submit(function(event) {
+    event.preventDefault();
+    searchQuery = '/search?query=' + $('input').val();
+    
+    $.get(searchQuery, function(data) {
+      $('#results').empty();
+    
+      data.tracks.items.forEach(function(track, index) {
+        resultIDs.push(track.id);
+        let newEl = $('<li onClick="getFeatures(&apos;' + track.id + '&apos;)"></li>').text(track.name + '   |   ' + track.artists[0].name);
+        $('#results').append(newEl);
+      }); 
+    });
+  });
+});
+
 // by default, you've got jQuery,
 // add other scripts at the bottom of index.html
 
@@ -53,17 +143,16 @@ $(function() {
     
     // Display the tracks of the playlists
     data.items.map(function(item, i) {
-      var track = JSON.stringify(item.track);
-      var row_inner = `<div class="track-details"><p>${track}</p></div>`;
-      
-      var row_content = `track: ${track.name}`;
-      var row_content = row_content + `artists: ${track.artists}`;
-      var row_content = row_content + `popularity: ${track.popularity}`;
-      
+      var track = item.track;      
+      var row_content = `track: ${track.name} <br/>`;
+      var row_content = row_content + `artists: ${JSON.stringify(track.artists)}<br/>`;
+      var row_content = row_content + `popularity: ${track.popularity}<br/>`;
+
+      var row_inner = `<div class="track-details"><p>${row_content}</p></div>`;      
       var row_inner = row_inner + `<canvas id="${track.id}" class="features-chart" width="400" height="200"></canvas>`;
       
       
-      var row = $('<div class="playlist-track" style="display:flex;">' + row_inner + '</div>');
+      var row = $('<div class="playlist-track">' + row_inner + '</div>');
       row.appendTo('#playlists-tracks-container');
       var track_features = getFeatures(track);
     });
