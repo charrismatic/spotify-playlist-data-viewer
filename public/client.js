@@ -42,7 +42,7 @@ function getFeatures(id) {
               'rgba(245,115,160, 0)',
               'rgba(80,155,245, 0)',
               'rgba(255,100,55, 0)',
-              'rgba(180,155,200, 10',
+              'rgba(180,155,200,10)',
               'rgba(250,230,45, 0)',
               'rgba(0,100,80, 0)',
               'rgba(175,40,150, 0)',
@@ -99,16 +99,12 @@ function getFeatures(id) {
 
 
 function drawAnalysis(_track) {
-  console.log('drawAnalysis');
-  
   let id = _track.id;
   let data = _track.data; 
-  
-  console.log(data);
+  // console.log(data);
   
   let deviceId = '';
   var img = new Image;
-  
   const colors = [
     'rgba(30,215,96, 0.9)',
     'rgba(245,115,160, 0.9)',
@@ -130,7 +126,7 @@ function drawAnalysis(_track) {
       currentIndex = (minIndex + maxIndex) / 2 | 0;
       currentElement = valueof(this[currentIndex]);
       if (currentElement < searchElement && ((currentIndex + 1 < this.length) 
-      ? valueof(this[currentIndex+1]) : Infinity) > searchElement) {
+          ? valueof(this[currentIndex+1]) : Infinity) > searchElement) {
         return valueout(currentElement, currentIndex, this);
       }
       
@@ -177,10 +173,13 @@ function drawAnalysis(_track) {
   
   const getRowPosition = index => index === 0 ? 0 : 1 / index + getRowPosition(index-1);
   const getFloorRowPosition = ( searchPosition, rowHeight, i=0, max=5) => i > max 
-  ? max : searchPosition < (getRowPosition(i+1) * rowHeight) 
-  ? i : getFloorRowPosition(searchPosition, rowHeight, i+1, max);
+    ? max : searchPosition < (getRowPosition(i+1) * rowHeight) 
+    ? i : getFloorRowPosition(searchPosition, rowHeight, i+1, max);
   
-  const analysisChart = document.getElementById(`#an-${id}.features-chart`);
+  const chart_selector = `#an-${id}.analysis-chart`;
+  console.log('chart_selector');
+  console.log(chart_selector);
+  const analysisChart = document.querySelector(chart_selector);
   
   analysisChart.style.width = analysisChart.offsetWidth;
   analysisChart.width = analysisChart.offsetWidth * 2;
@@ -281,25 +280,6 @@ function drawAnalysis(_track) {
 }
 
 
-function getAnalysis(id) {
-  let query = '/analysis?id=' + id;
-  
-  return fetch(query).then(e => e.json()).then(_data => {
-    drawAnalysis({
-      data: _data,
-      id: id,
-    });
-    // fetch(`https://api.spotify.com/v1/me/player/play${deviceId && `?device_id=${deviceId}`}`, {
-    //     method: "PUT",
-    //     body: JSON.stringify({"uris": [`spotify:track:${id}`]}),
-    //     headers: {
-    //       'Authorization': `Bearer ${accessToken}`
-    //     }
-    //   }).catch(e => console.error(e));
-  });
-}
-
-
 
 function flattenArtists(artists){
   var result = [];
@@ -364,13 +344,27 @@ $.get('/playlists-tracks', function(data) {
   });
 });
 
+function getAnalysis(id) {
+  let query = '/analysis?id=' + id;
+  
+  return fetch(query).then(e => e.json()).then(_data => {
+    drawAnalysis({
+      data: _data,
+      id: id,
+    });
+    // fetch(`https://api.spotify.com/v1/me/player/play${deviceId && `?device_id=${deviceId}`}`, {
+    //     method: "PUT",
+    //     body: JSON.stringify({"uris": [`spotify:track:${id}`]}),
+    //     headers: {
+    //       'Authorization': `Bearer ${accessToken}`
+    //     }
+    //   }).catch(e => console.error(e));
+  });
+}
 
-$.get('/analysis', function(data) {
-  return drawAnalysis(
-    data
-  })
-
-});
+// $.get('/analysis', function(data) {
+//   return drawAnalysis(data)
+// });
 
 $.get('/features', function(data) {
   var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
