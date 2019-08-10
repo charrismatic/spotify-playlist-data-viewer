@@ -1,8 +1,5 @@
-// client-side js
-// run by the browser each time your view template is loaded
 function getFeatures(id) {
   let query = '/features?id=' + id;
-
   $.get(query, function(data) {
     let labels = [];
     let values = [];
@@ -23,7 +20,6 @@ function getFeatures(id) {
          data: {        
           labels: labels,
           datasets: [{
-
             data: values,
             backgroundColor: [
               'rgba(30,215,96, 0.6)',
@@ -97,83 +93,13 @@ function getFeatures(id) {
 }
 
 
-function binaryIndexOf(searchElement, valueof, valueout) {
-    'use strict';
- 
-    var minIndex = 0;
-    var maxIndex = this.length - 1;
-    var currentIndex;
-    var currentElement;
- 
-    while (minIndex <= maxIndex) {
-        currentIndex = (minIndex + maxIndex) / 2 | 0;
-        currentElement = valueof(this[currentIndex]);
- 
-        if (currentElement < searchElement && ((currentIndex + 1 < this.length) ? valueof(this[currentIndex+1]) : Infinity) > searchElement) {
-          return valueout(currentElement, currentIndex, this);
-        }
-        if (currentElement < searchElement) {
-            minIndex = currentIndex + 1;
-        }
-        else if (currentElement > searchElement) {
-            maxIndex = currentIndex - 1;
-        }
-        else {
-            return this[currentIndex];
-        }
-    }
- 
-    return -1;
-}
-
-const getCurrentAndLastArrayLikes = (arrayLikes, time) => arrayLikes
-  .map(arrayLike =>
-       binaryIndexOf.call(arrayLike,
-                          time,
-                          e => e.start,
-                          (element, index, array) => ([
-                            array[index],
-                            array[index > 0 ?
-                                  index - 1 :
-                                  0]
-                          ])));
-
-const getRowPosition =
-      index => index === 0 ? 0 : 1 / index + getRowPosition(index-1);
-
-const getFloorRowPosition =
-  (searchPosition, rowHeight, i = 0, max = 5) => i > max ? max :
-    searchPosition < (getRowPosition(i + 1) * rowHeight) ? i : getFloorRowPosition(searchPosition, rowHeight, i + 1, max);
-
-
-function analysisChartClickHanlder() {
-  (clickEvent) => {
-    
-    const time = (clickEvent.offsetX/featuresChart.width) * data.track.duration * 2;
-    
-    console.log("arraylike: ", arrayLikes[getFloorRowPosition(clickEvent.offsetY * 2 , rowHeight)]);
-    console.log("FloorPosition: ", getFloorRowPosition(clickEvent.offsetY * 2 , rowHeight));
-
-    const kind = getFloorRowPosition(clickEvent.offsetY * 2 , rowHeight);
-    const seekTime = binaryIndexOf.call(arrayLikes[kind], time, e => e.start, (element, index) => element);
-    
-    fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${Math.floor(seekTime*1000)}`, {
-        method: "PUT",
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      }).catch(console.log);
-  });
-  
-  
-}
-
 
 function drawAnalysis(data) {
 
 
   let deviceId = '';
-
+  var img = new Image;
+  
   const colors = [
     'rgba(30,215,96, 0.9)',
     'rgba(245,115,160, 0.9)',
@@ -186,7 +112,6 @@ function drawAnalysis(data) {
     'rgba(30,50,100, 0.9)'
   ]
 
-  var img = new Image;
 
   
   const featuresChart = document.getElementById('features-chart');
@@ -194,18 +119,18 @@ function drawAnalysis(data) {
   featuresChart.width = featuresChart.offsetWidth * 2;
   featuresChart.style.height = featuresChart.offsetHeight;
   featuresChart.height = featuresChart.offsetHeight * 2;
-  
+ 
   const width = featuresChart.width;
   const height = featuresChart.height;
-  
   const ctx = featuresChart.getContext("2d");
-  
+
   const arrayLikesEntries = Object.entries(data)
     .filter(entry => entry[1] instanceof Array)
     .sort((a, b) => a[1].length - b[1].length)
   
   const arrayLikesKeys = arrayLikesEntries
     .map(entry => entry[0]);
+  
   const arrayLikes = arrayLikesEntries
     .map(entry => entry[1]);
   
