@@ -19,7 +19,7 @@ function getFeatures(id) {
     var ctx = $('#'+id+'.features-chart');
     
        var myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'horizontalBar',
         data: {
           labels: labels,
           datasets: [{
@@ -58,23 +58,33 @@ function getFeatures(id) {
           },
           scales: {
             yAxes: [{
+padding
               label: {
-                fontColor: 'blue',
+              lineHeight: .7,
                 display: true,
-                color: 'yellow',
               },
               gridLines: {
                 display: false ,
                 color: "#FFFFFF"
               },
               ticks: {
+                lineHeight: .7,
+                fontColor:'#ffffff',
                 beginAtZero:true,
                 max: 1
               }
             }],
             xAxes: [{
+              label: [{
+                fontStyle: 'normal',
+                fontColor:'#ffffff',
+              }],
               gridLines: {
-                color: "#FFFFFF"
+                 color: "#FFFFFF"
+              },
+              ticks: {
+                fontStyle: 'normal',
+                fontColor:'#ffffff',
               }
             }]
           }
