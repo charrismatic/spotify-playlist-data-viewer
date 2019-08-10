@@ -51,8 +51,9 @@ $(function() {
     data.items.map(function(playlist, i) {
       var row = $('<div class="playlist-track"/>');
       var data = JSON.stringify(playlist.items[0].track)
+      console.log(playlist);
       row.innerText = data;
-      row.appendTo('#category-playlists-container');
+      row.appendTo('#playlists-tracks-container');
     });
   });
   

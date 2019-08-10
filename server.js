@@ -61,15 +61,15 @@ app.get('/search-track', function (request, response) {
 
 
 app.get('/playlists-tracks', function (request, response) {
-   spotifyApi.getPlaylistsForCategory('holidays', { limit : 10, country: 'SE' })
-    .then(function(data) {
-    
-    // Send the list of playlists
+  var playlist_user = 'thelinmichael';
+  var playlist_id = '3ktAYNcRHpazJ9qecm3ptn';
+  spotifyApi.getPlaylistTracks(playlist_user, playlist_id, {offset: 1,limit: 5,fields: 'items'})
+  .then(function(data) {
     response.send(data.body.playlists);
-    
   }, function(err) {
-    console.error(err);
-  });
+   console.error(err);
+  });                 
+
 });
 
 app.get('/category-playlists', function (request, response) {
