@@ -18,60 +18,67 @@ function getFeatures(id) {
   
     var ctx = $('#'+id+'.features-chart');
     
-     var myChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          data: values,
-          backgroundColor: [
-            'rgba(30,215,96, 0.2)',
-            'rgba(245,115,160, 0.2)',
-            'rgba(80,155,245, 0.2)',
-            'rgba(255,100,55, 0.2)',
-            'rgba(180,155,200, 0.2)',
-            'rgba(250,230,45, 0.2)',
-            'rgba(0,100,80, 0.2)',
-            'rgba(175,40,150, 0.2)',
-            'rgba(30,50,100, 0.2)'
-          ],
-          borderColor: [
-            'rgba(30,215,96, 1)',
-            'rgba(245,115,160, 1)',
-            'rgba(80,155,245, 1)',
-            'rgba(255,100,55, 1)',
-            'rgba(180,155,200, 1)',
-            'rgba(250,230,45, 1)',
-            'rgba(0,100,80, 1)',
-            'rgba(175,40,150, 1)',
-            'rgba(30,50,100, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        legend: {
-          display: false
-        },
-        scales: {
-          yAxes: [{
-            gridLines: {
-              display: false ,
-              color: "#FFFFFF"
-            },
-            ticks: {
-              beginAtZero:true,
-              max: 1
-            }
-          }],
-          xAxes: [{
-            gridLines: {
-              color: "#FFFFFF"
-            }
+       var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: values,
+            backgroundColor: [
+              'rgba(30,215,96, 0.2)',
+              'rgba(245,115,160, 0.2)',
+              'rgba(80,155,245, 0.2)',
+              'rgba(255,100,55, 0.2)',
+              'rgba(180,155,200, 0.2)',
+              'rgba(250,230,45, 0.2)',
+              'rgba(0,100,80, 0.2)',
+              'rgba(175,40,150, 0.2)',
+              'rgba(30,50,100, 0.2)'
+            ],
+            borderColor: [
+              'rgba(30,215,96, 1)',
+              'rgba(245,115,160, 1)',
+              'rgba(80,155,245, 1)',
+              'rgba(255,100,55, 1)',
+              'rgba(180,155,200, 1)',
+              'rgba(250,230,45, 1)',
+              'rgba(0,100,80, 1)',
+              'rgba(175,40,150, 1)',
+              'rgba(30,50,100, 1)'
+            ],
+            borderWidth: 1
           }]
+        },
+        options: { 
+          scaleLabel: {
+            display: true,
+          },
+          legend: {
+            display: false
+          },
+          scales: {
+            yAxes: [{
+              label: {
+                display: true,
+                color: 'yellow',
+              },
+              gridLines: {
+                display: false ,
+                color: "#FFFFFF"
+              },
+              ticks: {
+                beginAtZero:true,
+                max: 1
+              }
+            }],
+            xAxes: [{
+              gridLines: {
+                color: "#FFFFFF"
+              }
+            }]
+          }
         }
-      }
-    });
+      });
 
 
   });
