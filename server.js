@@ -1,7 +1,5 @@
-// server.js
-// where your node app starts
-
 // init project
+var qs = require('querystring');
 var express = require('express');
 var app = express();
 
@@ -13,13 +11,29 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
-
 //-------------------------------------------------------------//
 //----------------------- AUTHORIZATION -----------------------//
 //-------------------------------------------------------------//
 
 
-// Initialize Spotify API wrapper
+const jssdkscopes = [
+  // "streaming",
+  // "user-read-birthdate", 
+  // "user-read-email", 
+  // "user-read-private", 
+  // "user-modify-playback-state"
+];
+
+const redirectUriParameters = {
+  client_id: process.env.CLIENT_ID,
+  response_type: 'token',
+  scope: jssdkscopes.join(' '),
+  redirect_uri: encodeURI('https://spotify-playlist-data-viewer.glitch.me/'),
+  show_dialog: true,
+};
+
+const redirectUri = `https://accounts.spotify.com/authorize?${qs.stringify(redirectUriParameters)}`;
+
 var SpotifyWebApi = require('spotify-web-api-node');
 
 // The object we'll use to interact with the API
@@ -31,13 +45,36 @@ var spotifyApi = new SpotifyWebApi({
 // Using the Client Credentials auth flow, authenticate our app
 spotifyApi.clientCredentialsGrant()
   .then(function(data) {
-  
-    // Save the access token so that it's used in future calls
     spotifyApi.setAccessToken(data.body['access_token']);
-  
   }, function(err) {
     console.log('Something went wrong when retrieving an access token', err.message);
   });
+
+
+
+
+function authenticate(callback) {
+  spotifyApi.clientCredentialsGrant()
+    .then(function(data) {
+      console.log('The access token expires in ' + data.body['expires_in']);
+      console.log('The access token is ' + data.body['access_token']);
+    
+      callback instanceof Function && callback();
+
+      // Save the access token so that it's used in future calls
+      spotifyApi.setAccessToken(data.body['access_token']);
+    }, function(err) {
+      console.log('Something went wrong when retrieving an access token', err.message);
+    });
+}
+
+
+const reAuthenticateOnFailure = (action) => {
+  action(() => {
+    authenticate(action);
+  })
+}
+
 
 
 //-------------------------------------------------------------//
@@ -138,6 +175,7 @@ app.get('/user', function (request, response) {
 });
 
 
+
 app.get("/features", function (request, response) {
   spotifyApi.getAudioFeaturesForTrack(request.query.id)
   .then(function(data) {
@@ -147,13 +185,6 @@ app.get("/features", function (request, response) {
     console.log(err)
   });
 });
-
-const reAuthenticateOnFailure = (action) => {
-  action(() => {
-    authenticate(action);
-  })
-}
-
 
 app.get("/analysis", function (request, response) {
   reAuthenticateOnFailure((failure) => {

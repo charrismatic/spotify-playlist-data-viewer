@@ -366,7 +366,9 @@ $.get('/playlists-tracks', function(data) {
 
 
 $.get('/analysis', function(data) {
-
+  return drawAnalysis(
+    data
+  })
 
 });
 
@@ -381,25 +383,25 @@ $.get('/features', function(data) {
 });
 
 
-$.get('/artist', function(data) {
-  var img = $('<img class="circle-image" />');
-  img.attr('src', data.images[0].url);
-  img.appendTo('#artist-container');
+// $.get('/artist', function(data) {
+//   var img = $('<img class="circle-image" />');
+//   img.attr('src', data.images[0].url);
+//   img.appendTo('#artist-container');
 
-  var trackName = $('<h3>' + data.name + '</h3>');
-  trackName.appendTo('#artist-container');
+//   var trackName = $('<h3>' + data.name + '</h3>');
+//   trackName.appendTo('#artist-container');
 
-  var trackName = $('<h3>Popularity: ' + data.popularity + '</h3>');
-  trackName.appendTo('#artist-container');
+//   var trackName = $('<h3>Popularity: ' + data.popularity + '</h3>');
+//   trackName.appendTo('#artist-container');
 
-  var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
-  trackName.appendTo('#artist-container');
+//   var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
+//   trackName.appendTo('#artist-container');
 
-  data.genres.map(function(genre, i) {
-    var genreItem = $('<p>' + genre + '</p>');
-    genreItem.appendTo('#artist-container');
-  });
-});
+//   data.genres.map(function(genre, i) {
+//     var genreItem = $('<p>' + genre + '</p>');
+//     genreItem.appendTo('#artist-container');
+//   });
+// });
 
 $.get('/artist-top-tracks', function(data) {
   data.map(function(track, i) {
