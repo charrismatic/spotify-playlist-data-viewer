@@ -53,14 +53,13 @@ function getFeatures(id) {
           scaleLabel: {
             display: true,
           },
-          legend: {
-            display: false
-          },
+          legend: { display: false },
           scales: {
             yAxes: [{
-padding
+              padding: .5,
               label: {
-              lineHeight: .7,
+              padding: .5,
+              lineHeight: .5,
                 display: true,
               },
               gridLines: {
@@ -68,10 +67,8 @@ padding
                 color: "#FFFFFF"
               },
               ticks: {
-                lineHeight: .7,
+                lineHeight: .5,
                 fontColor:'#ffffff',
-                beginAtZero:true,
-                max: 1
               }
             }],
             xAxes: [{
@@ -85,6 +82,8 @@ padding
               ticks: {
                 fontStyle: 'normal',
                 fontColor:'#ffffff',
+                beginAtZero:true,
+                max: 1
               }
             }]
           }
@@ -141,7 +140,7 @@ padding
       var row_inner = `<div class="track-details"><p>${row_content}</p></div>`;      
       
       var row_inner = row_inner + `<section class="features"><ul id="results"></ul><p id="features"></p>`;
-      var row_inner = row_inner + `<canvas id="${track.id}" class="features-chart" width="400" height="200"></canvas>`;
+      var row_inner = row_inner + `<canvas id="${track.id}" class="features-chart" width="400" height="150"></canvas>`;
       var row_inner = row_inner + '</section>';
      
       var row = $('<div class="playlist-track">' + row_inner + '</div>');
@@ -153,14 +152,7 @@ padding
   
   
   $.get('/features', function(data) {
-    // "Data" is the object we get from the API. See server.js for the function that returns it.
-    console.group('%cResponse from /audio-features', 'color: #F037A5; font-size: large');
-    console.log(data);
-    console.groupEnd();
-    
     var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
-    
-    // Display the audio features
     keys.map(function(key, i) {
       if (data.hasOwnProperty(key)) {
         var feature = $('<p style="#ffffff"><span class="big-number">' + data[key] + ' </span>'  + key + '</p>');
@@ -170,12 +162,6 @@ padding
   });
   
   $.get('/artist', function(data) {
-    // "Data" is the object we get from the API. See server.js for the function that returns it.
-    console.group('%cResponse from /artist', 'color: #F037A5; font-size: large');
-    console.log(data);
-    console.groupEnd();
-    
-    // Display the artist's image
     var img = $('<img class="circle-image" />');
     img.attr('src', data.images[0].url);
     img.appendTo('#artist-container');

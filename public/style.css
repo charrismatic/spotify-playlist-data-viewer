@@ -18,19 +18,11 @@ h1 {
   color: #1ED760;
 }
 
-img {
-  display: inline-block;
-  width: 300px;
-  height: 300px;
-}
-
 main {
-  
+  background-color: #2196F3;
 }
 
-.circle-image {
-  border-radius: 300px;
-}
+.circle-image {  border-radius: 300px;}
 
 section {
   padding: 30px 70px;
