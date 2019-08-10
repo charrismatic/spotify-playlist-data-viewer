@@ -81,6 +81,7 @@ function drawFeatures(data) {
   });
 }
 
+
 function getFeatures(id) {
   const query = `/features?id=${id}`;
   const selector = `#ft-${id}.features-chart`;  
@@ -111,13 +112,12 @@ function getFeatures(id) {
 }
 
 
+
 function drawAnalysis(_track) {
   let id = _track.id;
   let data = _track.data; 
-  // console.log(data);
-  
-  let deviceId = '';
   var img = new Image;
+  let deviceId = '';
   const colors = [
     'rgba(30,215,96, 0.9)',
     'rgba(245,115,160, 0.9)',
@@ -138,9 +138,9 @@ function drawAnalysis(_track) {
     while (minIndex <= maxIndex) {
       currentIndex = (minIndex + maxIndex) / 2 | 0;
       currentElement = valueof(this[currentIndex]);
-
+      
       if (currentElement < searchElement && ((currentIndex + 1 < this.length) 
-          ? valueof(this[currentIndex+1]) : Infinity) > searchElement) {
+      ? valueof(this[currentIndex+1]) : Infinity) > searchElement) {
         return valueout(currentElement, currentIndex, this);
       }
       
@@ -159,14 +159,12 @@ function drawAnalysis(_track) {
     var chart = clickEvent.target;
     const time = (clickEvent.offsetX / chart.width) * data.track.duration * 2;
     const kind = getFloorRowPosition(clickEvent.offsetY * 2 , rowHeight);
-
     //     const seekTime = binaryIndexOf.call(  
     //       arrayLikes[kind], 
     //       time, 
     //       e => e.start, 
     //       (element, index) => element
     //     );
-
     // fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${Math.floor(seekTime*1000)}`, {
     //   method: "PUT",
     //   headers: {
@@ -188,8 +186,8 @@ function drawAnalysis(_track) {
   
   const getRowPosition = index => index === 0 ? 0 : 1 / index + getRowPosition(index-1);
   const getFloorRowPosition = ( searchPosition, rowHeight, i=0, max=5) => i > max 
-    ? max : searchPosition < (getRowPosition(i+1) * rowHeight) 
-    ? i : getFloorRowPosition(searchPosition, rowHeight, i+1, max);
+      ? max : searchPosition < (getRowPosition(i+1) * rowHeight) 
+      ? i : getFloorRowPosition(searchPosition, rowHeight, i+1, max);
   
   const chart_selector = `#an-${id}.analysis-chart`;
   const analysisChart = document.querySelector(chart_selector);
@@ -212,87 +210,98 @@ function drawAnalysis(_track) {
   const rowHeight = height / arrayLikes.length;
   
   analysisChart.addEventListener('click', analysisChartClickHanlder);
+
   arrayLikes.forEach((arrayLike, arrayLikeIndex) => {
     const startY = getRowPosition(arrayLikeIndex) * rowHeight;
     const arrayLikeHeight = rowHeight / (arrayLikeIndex + 1);
     arrayLike.forEach((section, sectionIndex) => {
       ctx.fillStyle = colors[sectionIndex % colors.length];
-      ctx.fillRect(section.start/data.track.duration*width,
+      ctx.fillRect(
+        section.start/data.track.duration*width,
         getRowPosition(arrayLikeIndex) * rowHeight,
         section.duration/data.track.duration*width,
-        arrayLikeHeight);
-      });
-      const label = arrayLikesKeys[arrayLikeIndex].charAt(0).toUpperCase() + arrayLikesKeys[arrayLikeIndex].slice(1)
+        arrayLikeHeight
+      );
+    });
+
+      const label = arrayLikesKeys[arrayLikeIndex].charAt(0).toUpperCase() 
+          + arrayLikesKeys[arrayLikeIndex].slice(1)
+
       ctx.fillStyle = "#000";
       ctx.font = `bold ${arrayLikeHeight}px Circular`;
       ctx.fillText(label,0,startY + arrayLikeHeight);
     });
     
     const markerHeight = getRowPosition(arrayLikes.length) * rowHeight;
+
     function provideAnimationFrame(timestamp) {
       player && player.getCurrentState().then(state => {
+        const position = state.position/1000/data.track.duration*width
+        const currentAndLastArrayLikes = getCurrentAndLastArrayLikes(arrayLikes, state.position/1000);
+        const pitchChanges = currentAndLastArrayLikes[3][0].pitches.map((pitch, index) => Math.abs(pitch - currentAndLastArrayLikes[3][1].pitches[index]));
+        const timbreChanges = currentAndLastArrayLikes[3][0].timbre.map((timbre, index) => Math.abs(timbre - currentAndLastArrayLikes[3][1].timbre[index]));
+        const pitchBoxWidth = 60;
+
+        ctx.fillStyle = "#000";
+        ctx.strokeStyle = "#AAA";
+
         ctx.clearRect(0, 0, analysisChart.width, analysisChart.height);
         ctx.drawImage(img,0,0);
-        ctx.fillStyle = "#000";
+        ctx.fillRect(position-2, 0, 5, markerHeight);
+
+        pitchChanges.forEach((pitchChange, i) => {
+          ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
+          ctx.fillRect(
+            i*pitchBoxWidth,
+            height - 2 * pitchBoxWidth,
+            pitchBoxWidth,
+            pitchBoxWidth
+          );
+        });
         
-        const position = state.position/1000/data.track.duration*width
-        ctx.fillRect(position-2,
-          0,
-          5,
-          markerHeight);
-          
-          
-          
-          const currentAndLastArrayLikes = getCurrentAndLastArrayLikes(arrayLikes, state.position/1000);
-          const pitchChanges = currentAndLastArrayLikes[3][0].pitches.map((pitch, index) => Math.abs(pitch - currentAndLastArrayLikes[3][1].pitches[index]));
-          const timbreChanges = currentAndLastArrayLikes[3][0].timbre.map((timbre, index) => Math.abs(timbre - currentAndLastArrayLikes[3][1].timbre[index]));
-          
-          // Pitch boxes
-          const pitchBoxWidth = 60;
-          ctx.strokeStyle = "#AAA";
-          pitchChanges.forEach((pitchChange, i) => {
-            ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
-            ctx.fillRect(i*pitchBoxWidth,
-              height - 2 * pitchBoxWidth,
-              pitchBoxWidth,
-              pitchBoxWidth);
-            });
+        timbreChanges.forEach((timbreChange, i) => {
+          ctx.fillStyle = `hsl(0, 0%, ${timbreChange * 100}%)`;
+          ctx.fillRect(
+            i*pitchBoxWidth,
+            height - 4 * pitchBoxWidth,
+            pitchBoxWidth,
+            pitchBoxWidth
+          );
+        });
+        
+        currentAndLastArrayLikes[3][0].pitches.forEach((pitchChange, i) => {
+          ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
+          ctx.fillRect(
+            i*pitchBoxWidth,
+            height - pitchBoxWidth,
+            pitchBoxWidth,
+            pitchBoxWidth
+          );
+        });
+        
+        currentAndLastArrayLikes[3][0].timbre.forEach((pitchChange, i) => {
+          ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
+          ctx.fillRect(
+            i*pitchBoxWidth,
+            height - 3 * pitchBoxWidth,
+            pitchBoxWidth,
+            pitchBoxWidth
+          );
+        });
+        
+      window.requestAnimationFrame(provideAnimationFrame);
+    }).catch(e => {
+      console.error("Animation: ", e);
+      window.requestAnimationFrame(provideAnimationFrame);
+    });
+  }
 
-            timbreChanges.forEach((timbreChange, i) => {
-              ctx.fillStyle = `hsl(0, 0%, ${timbreChange * 100}%)`;
-              ctx.fillRect(i*pitchBoxWidth,
-                height - 4 * pitchBoxWidth,
-                pitchBoxWidth,
-                pitchBoxWidth);
-              });
-
-              currentAndLastArrayLikes[3][0].pitches.forEach((pitchChange, i) => {
-                ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
-                ctx.fillRect(i*pitchBoxWidth,
-                  height - pitchBoxWidth,
-                  pitchBoxWidth,
-                  pitchBoxWidth);
-                });
-
-                currentAndLastArrayLikes[3][0].timbre.forEach((pitchChange, i) => {
-                  ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
-                  ctx.fillRect(i*pitchBoxWidth,
-                    height - 3 * pitchBoxWidth,
-                    pitchBoxWidth,
-                    pitchBoxWidth);
-                  });
-                  
-              window.requestAnimationFrame(provideAnimationFrame);
-            }).catch(e => {
-              console.error("Animation: ", e);
-              window.requestAnimationFrame(provideAnimationFrame);
-            });
-          }
-          window.requestAnimationFrame(provideAnimationFrame);
-          img.src = analysisChart.toDataURL('png');
+  window.requestAnimationFrame(provideAnimationFrame);
+  img.src = analysisChart.toDataURL('png');
 }
-
-
+  
+  
+  
 
 function flattenArtists(artists){
   var result = [];
