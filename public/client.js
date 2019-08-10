@@ -1,3 +1,9 @@
+
+function drawFeatures(data) {
+  
+}
+
+
 function getFeatures(id) {
   let query = '/features?id=' + id;
   $.get(query, function(data) {
@@ -93,9 +99,9 @@ function getFeatures(id) {
 }
 
 
-
 function drawAnalysis(data) {
-
+  console.log('drawAnalysis');
+  console.log(data);
 
   let deviceId = '';
   var img = new Image;
@@ -111,9 +117,7 @@ function drawAnalysis(data) {
     'rgba(175,40,150, 0.9)',
     'rgba(30,50,100, 0.9)'
   ]
-
-
-  
+ data.
   const featuresChart = document.getElementById('features-chart');
   featuresChart.style.width = featuresChart.offsetWidth;
   featuresChart.width = featuresChart.offsetWidth * 2;
@@ -161,10 +165,12 @@ function drawAnalysis(data) {
       ctx.fillStyle = "#000";
 
       const position = state.position/1000/data.track.duration*width
-      ctx.fillRect(position-2,
-                   0,
-                   5,
-                   markerHeight);
+      ctx.fillRect(
+          position-2,
+          0,
+          5,
+          markerHeight
+      );
       
       
 
@@ -215,13 +221,25 @@ function drawAnalysis(data) {
 }
 
 
-$.get('/category-playlists', function(data) {
-  data.items.map(function(playlist, i) {
-    var img = $('<img class="cover-image"/>');
-    img.attr('src', playlist.images[0].url);
-    img.appendTo('#category-playlists-container');
+function getAnalysis(id) {
+  let query = '/analysis?id=' + id;
+  
+  return fetch(query).then(e => e.json()).then(_data => {
+    drawAnalysis({
+      data: _data,
+    }  
+
+                  );
+      // fetch(`https://api.spotify.com/v1/me/player/play${deviceId && `?device_id=${deviceId}`}`, {
+      //     method: "PUT",
+      //     body: JSON.stringify({"uris": [`spotify:track:${id}`]}),
+      //     headers: {
+      //       'Authorization': `Bearer ${accessToken}`
+      //     }
+      //   }).catch(e => console.error(e));
   });
-});
+}
+
 
 
 function flattenArtists(artists){
@@ -248,18 +266,7 @@ function flattenTrack(track) {
   };
 }
 
-
-function getAnalysisHtml(track) {
-  return `<section class="analysis">
-    <ul id="results"></ul>
-    <div id="analysis-chart-container">
-      <canvas id="analysis-chart"></canvas>
-    </div>
-  </section>`;
-}
-
-
-function getFeaturesHtml(track) {
+function getTrackHtml(track) {
  var output = `
  <section class="features">
   <div class="track-details">
@@ -282,96 +289,106 @@ function getFeaturesHtml(track) {
   return output;
 }
 
-  $.get('/playlists-tracks', function(data) {
-    var playlist_id = '4VDQkvZhZbpuXKLiS99yk7'
-    var options = {};
-    var callback = {};
-    
-    data.items.map(function(item, i) {
-      var track = flattenTrack(item.track);
-      var content = getFeaturesHtml(track);       
-      var row = $(`<div class="playlist-track">\n${content}\n</div>`);
-      row.appendTo('#playlists-tracks-container');
-      getFeatures(track.id);    
-    });
+$.get('/playlists-tracks', function(data) {
+  var playlist_id = '4VDQkvZhZbpuXKLiS99yk7'
+  var options = {};
+  var callback = {};
+
+  data.items.map(function(item, i) {
+    var track = flattenTrack(item.track);
+    var content = getTrackHtml(track);       
+    var row = $(`<div class="playlist-track">\n${content}\n</div>`);
+    row.appendTo('#playlists-tracks-container');
+
+    getFeatures(track.id);
+    getAnalysis(track.id);
   });
-  
-  
+});
 
 
-  $.get('/analysis', function(data) {
-    var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
-    keys.map(function(key, i) {
-      if (data.hasOwnProperty(key)) {
-        var feature = $('<p style="#ffffff"><span class="big-number">' + data[key] + ' </span>'  + key + '</p>');
-        feature.appendTo('#audio-features-container');
-      }
-    });
+$.get('/analysis', function(data) {
+  var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
+  keys.map(function(key, i) {
+    if (data.hasOwnProperty(key)) {
+      var feature = $('<p style="#ffffff"><span class="big-number">' + data[key] + ' </span>'  + key + '</p>');
+      feature.appendTo('#audio-features-container');
+    }
   });
-    
-  $.get('/features', function(data) {
-    var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
-    keys.map(function(key, i) {
-      if (data.hasOwnProperty(key)) {
-        var feature = $('<p style="#ffffff"><span class="big-number">' + data[key] + ' </span>'  + key + '</p>');
-        feature.appendTo('#audio-features-container');
-      }
-    });
+});
+
+$.get('/features', function(data) {
+  var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
+  keys.map(function(key, i) {
+    if (data.hasOwnProperty(key)) {
+      var feature = $('<p style="#ffffff"><span class="big-number">' + data[key] + ' </span>'  + key + '</p>');
+      feature.appendTo('#audio-features-container');
+    }
   });
-  
-  $.get('/artist', function(data) {
-    var img = $('<img class="circle-image" />');
-    img.attr('src', data.images[0].url);
-    img.appendTo('#artist-container');
-    
-    // Display the artist name
-    var trackName = $('<h3>' + data.name + '</h3>');
-    trackName.appendTo('#artist-container');
-    
-    // Display the artist's popularity
-    var trackName = $('<h3>Popularity: ' + data.popularity + '</h3>');
-    trackName.appendTo('#artist-container');
-    
-    // Display the artist's follower count
-    var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
-    trackName.appendTo('#artist-container');
-    
-    // Display the artist's genres
-    data.genres.map(function(genre, i) {
-      var genreItem = $('<p>' + genre + '</p>');
-      genreItem.appendTo('#artist-container');
-    });
+});
+
+$.get('/artist', function(data) {
+  var img = $('<img class="circle-image" />');
+  img.attr('src', data.images[0].url);
+  img.appendTo('#artist-container');
+
+  // Display the artist name
+  var trackName = $('<h3>' + data.name + '</h3>');
+  trackName.appendTo('#artist-container');
+
+  // Display the artist's popularity
+  var trackName = $('<h3>Popularity: ' + data.popularity + '</h3>');
+  trackName.appendTo('#artist-container');
+
+  // Display the artist's follower count
+  var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
+  trackName.appendTo('#artist-container');
+
+  // Display the artist's genres
+  data.genres.map(function(genre, i) {
+    var genreItem = $('<p>' + genre + '</p>');
+    genreItem.appendTo('#artist-container');
   });
-  
-  $.get('/artist-top-tracks', function(data) {
-    // "Data" is the object we get from the API. See server.js for the function that returns it.
-    console.group('%cResponse from /artist-top-tracks', 'color: #F037A5; font-size: large');
-    console.log(data);
-    console.groupEnd();
-    
-    // Display the audio features
-    data.map(function(track, i) {
-      var trackName = $('<li>' + track.name + '</li>');
-      trackName.appendTo('#top-tracks-container');
-    });
+});
+
+$.get('/artist-top-tracks', function(data) {
+  // "Data" is the object we get from the API. See server.js for the function that returns it.
+  console.group('%cResponse from /artist-top-tracks', 'color: #F037A5; font-size: large');
+  console.log(data);
+  console.groupEnd();
+
+  // Display the audio features
+  data.map(function(track, i) {
+    var trackName = $('<li>' + track.name + '</li>');
+    trackName.appendTo('#top-tracks-container');
   });
-  
-  $.get('/user', function(data) {
-    // "Data" is the object we get from the API. See server.js for the function that returns it.
-    console.group('%cResponse from /user', 'color: #F037A5; font-size: large');
-    console.log(data);
-    console.groupEnd();
-    
-    // Display the user's image
-    var img = $('<div class="circle-image"></div>');
-    img.attr('style', 'background:url(' + data.images[0].url + ') center/cover;height:300px;width:300px;');
-    img.appendTo('#user-container');
-    
-    // Display the user id
-    var trackName = $('<a href="' + data.external_urls.spotify + '" style="color:white;text-decoration:underline;"><h3>' + data.id + '</h3></a>');
-    trackName.appendTo('#user-container');
-    
-    // Display the user's follower count
-    var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
-    trackName.appendTo('#user-container');
+});
+
+
+$.get('/category-playlists', function(data) {
+  data.items.map(function(playlist, i) {
+    var img = $('<img class="cover-image"/>');
+    img.attr('src', playlist.images[0].url);
+    img.appendTo('#category-playlists-container');
   });
+});
+
+
+$.get('/user', function(data) {
+  // "Data" is the object we get from the API. See server.js for the function that returns it.
+  console.group('%cResponse from /user', 'color: #F037A5; font-size: large');
+  console.log(data);
+  console.groupEnd();
+
+  // Display the user's image
+  var img = $('<div class="circle-image"></div>');
+  img.attr('style', 'background:url(' + data.images[0].url + ') center/cover;height:300px;width:300px;');
+  img.appendTo('#user-container');
+
+  // Display the user id
+  var trackName = $('<a href="' + data.external_urls.spotify + '" style="color:white;text-decoration:underline;"><h3>' + data.id + '</h3></a>');
+  trackName.appendTo('#user-container');
+
+  // Display the user's follower count
+  var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
+  trackName.appendTo('#user-container');
+});
