@@ -93,8 +93,6 @@ function getFeatures(id) {
           }
         }
       });
-
-
   });
 }
 
@@ -133,12 +131,33 @@ function getFeatures(id) {
     };
   }
   
+
+  function getAnalysisHtml(track) {
+
+     <section class="analysis">
+      <ul id="results"></ul>
+      <div id="analysis-chart-container">
+        <canvas id="analysis-chart"></canvas>
+      </div>
+    </section>
+  }
+
+
+  function getFeaturesHtml(track) {
+
+     <section class="features">
+      <ul id="results"></ul>
+      <div id="features-chart-container">
+        <canvas id="features-chart"></canvas>
+      </div>
+    </section>
+  }
+
   $.get('/playlists-tracks', function(data) {
     var playlist_id = '4VDQkvZhZbpuXKLiS99yk7'
     var options = {};
     var callback = {};
     
-    // Display the tracks of the playlists
     data.items.map(function(item, i) {
       var track = flattenTrack(item.track);
       var row_content = `track: ${track.name} <br/>`;
@@ -150,7 +169,7 @@ function getFeatures(id) {
       var row_inner = row_inner + `<section class="features"><ul id="results"></ul><p id="features"></p>`;
       var row_inner = row_inner + `<canvas id="${track.id}" class="features-chart" width="400" height="150"></canvas>`;
       var row_inner = row_inner + '</section>';
-     
+      var content = getFeaturesHtml(track);
       var row = $('<div class="playlist-track">' + row_inner + '</div>');
       row.appendTo('#playlists-tracks-container');
       getFeatures(track.id);    
@@ -158,7 +177,18 @@ function getFeatures(id) {
   });
   
   
-  
+
+
+  $.get('/analysis', function(data) {
+    var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
+    keys.map(function(key, i) {
+      if (data.hasOwnProperty(key)) {
+        var feature = $('<p style="#ffffff"><span class="big-number">' + data[key] + ' </span>'  + key + '</p>');
+        feature.appendTo('#audio-features-container');
+      }
+    });
+  });
+    
   $.get('/features', function(data) {
     var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
     keys.map(function(key, i) {

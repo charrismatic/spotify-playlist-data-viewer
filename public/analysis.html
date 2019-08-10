@@ -1,83 +1,83 @@
-<title>Spotify Audio Analysis</title>
-<meta name="description" content="A cool thing made with Glitch">
-<link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://sp-bootstrap.global.ssl.fastly.net/8.0.0/sp-bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
-</head>
 <body>
-    <style>
+<style>
 * {
-  box-sizing: border-box;
+box-sizing: border-box;
 }
 
 body {
-  padding: 5vh 5vw;
+padding: 5vh 5vw;
 }
 
 p {
-  max-width: 700px;
+max-width: 700px;
 }
 
 li {
-  margin-bottom: 5px;
+margin-bottom: 5px;
 }
 
 input {
-  width: 250px;
-  margin-bottom: 10px;
+width: 250px;
+margin-bottom: 10px;
 }
 
 footer {
-  margin-top: 50px;
-  padding-top: 25px;
-  border-top: 1px solid lightgrey;
+margin-top: 50px;
+padding-top: 25px;
+border-top: 1px solid lightgrey;
 }
 
 footer > a {
-  color: #BBBBBB;
+color: #BBBBBB;
 }
 
 .nicejob {
-  text-decoration: line-through;
+text-decoration: line-through;
 }
 
 #results {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  max-height: 30vh;
+display: flex;
+flex-direction: column;
+flex-wrap: wrap;
+max-height: 30vh;
 }
 
 #results li {
-  text-decoration: underline;
-  cursor: pointer;
+text-decoration: underline;
+cursor: pointer;
 }
 
 @media screen and (max-width: 900px) {
-  #results {
-    display: inline-block;
-    max-height: auto;
-  }
+#results {
+display: inline-block;
+max-height: auto;
+}
 }
 
 @media screen and (min-width: 1280px) {
-  #results {
-    max-height: 15vh;
-  }
+#results {
+max-height: 15vh;
+}
 }
 
 #features-chart {
-  width: 100%;
+width: 100%;
   min-height:400px;
-}</style>
+}
+</style>
+
 <section class="features">
- <ul id="results">
- </ul>
- <div id="features-chart-container">
- <canvas id="features-chart"></canvas></div></section>
+  <ul id="results"></ul>
+  <div id="features-chart-container">
+    <canvas id="features-chart"></canvas>
+</div>
+</section>
+
+  
 </main>
-<script src="https://sdk.scdn.co/spotify-player.js"></script>
+  
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
 <script src="/analysis.js"></script>
