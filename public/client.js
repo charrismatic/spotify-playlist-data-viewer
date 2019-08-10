@@ -131,10 +131,8 @@ function getFeatures(id) {
     };
   }
   
-
   function getAnalysisHtml(track) {
-
-     <section class="analysis">
+    <section class="analysis">
       <ul id="results"></ul>
       <div id="analysis-chart-container">
         <canvas id="analysis-chart"></canvas>
@@ -144,13 +142,26 @@ function getFeatures(id) {
 
 
   function getFeaturesHtml(track) {
+   var output = `
+   <section class="features">
+    <div class="track-details">
+      <dl>
+        <dt>track:</dt>
+        <dd>${track.name}</dd>
+        <dt>artists:</dt>
+        <dd>${track.artists}<dd/>
+        <dt>popularity:<dt>
+        <dd>${track.popularity}<dd/>
+      </dl>
+    </div>
+    <ul id="results"></ul>
+    <p id="features"></p>
+    <div id="charts-container">
+      <canvas id="ft-${track.id}" class="features-chart" width="400" height="150"></canvas>
+      <canvas id="an-${track.id}" class="analysis-chart" width="400" height="150"></canvas>
+    </div>
+    </section>`;
 
-     <section class="features">
-      <ul id="results"></ul>
-      <div id="features-chart-container">
-        <canvas id="features-chart"></canvas>
-      </div>
-    </section>
   }
 
   $.get('/playlists-tracks', function(data) {
@@ -160,17 +171,8 @@ function getFeatures(id) {
     
     data.items.map(function(item, i) {
       var track = flattenTrack(item.track);
-      var row_content = `track: ${track.name} <br/>`;
-      var row_content = row_content + `artists: ${track.artists}<br/>`;
-      var row_content = row_content + `popularity: ${track.popularity}<br/>`;
-
-      var row_inner = `<div class="track-details"><p>${row_content}</p></div>`;      
-      
-      var row_inner = row_inner + `<section class="features"><ul id="results"></ul><p id="features"></p>`;
-      var row_inner = row_inner + `<canvas id="${track.id}" class="features-chart" width="400" height="150"></canvas>`;
-      var row_inner = row_inner + '</section>';
-      var content = getFeaturesHtml(track);
-      var row = $('<div class="playlist-track">' + row_inner + '</div>');
+      var content = getFeaturesHtml(track);       
+      var row = $(`<div class="playlist-track">\n${content}\n</div>`);
       row.appendTo('#playlists-tracks-container');
       getFeatures(track.id);    
     });
