@@ -48,16 +48,17 @@ $(function() {
     console.groupEnd();
     
     var playlist_id = '4VDQkvZhZbpuXKLiS99yk7'
-    var options = {};''
-    var  callback
+    var options = {};
+    var callback = {};
     
     // Display the tracks of the playlists
-    data.items.map(function(playlist, i) {
-      var row = $('<div class="playlist-track"/>');
-      var data = JSON.stringify(playlist.items[0].track)
-      console.log(playlist);
-      row.innerText = data;
+    data.items.map(function(item, i) {
+
+      var track_text = JSON.stringify(item.track);
+      var row_inner = `<div class="track-details"><p>${track_text}</p></div>`;
+      var row = $('<div class="playlist-track"/>' + row_inner + '</div>');
       row.appendTo('#playlists-tracks-container');
+      row_inner.appendTo('#playlists-tracks-container');
     });
   });
   
