@@ -71,31 +71,6 @@ function getFeatures(id) {
 }
 
 $(function() {
-  let trackID = '';
-  let searchQuery = '';
-  let resultIDs = [];
-  
-  $('form').submit(function(event) {
-    event.preventDefault();
-    searchQuery = '/search?query=' + $('input').val();
-    
-    $.get(searchQuery, function(data) {
-      $('#results').empty();
-    
-      data.tracks.items.forEach(function(track, index) {
-        resultIDs.push(track.id);
-        let newEl = $('<li onClick="getFeatures(&apos;' + track.id + '&apos;)"></li>').text(track.name + '   |   ' + track.artists[0].name);
-        $('#results').append(newEl);
-      }); 
-    });
-  });
-});
-
-// by default, you've got jQuery,
-// add other scripts at the bottom of index.html
-
-$(function() {
-    
   $.get('/search-track', function(data) {
     // "Data" is the object we get from the API. See server.js for the function that returns it.
     console.group('%cResponse from /search-track', 'color: #F037A5; font-size: large');
@@ -149,12 +124,14 @@ $(function() {
       var row_content = row_content + `popularity: ${track.popularity}<br/>`;
 
       var row_inner = `<div class="track-details"><p>${row_content}</p></div>`;      
+      
+      var row_inner = row_inner + `<section class="features"><ul id="results"></ul><p id="features"></p>`;
       var row_inner = row_inner + `<canvas id="${track.id}" class="features-chart" width="400" height="200"></canvas>`;
-      
-      
+      var row_inner = row_inner + '</section>';
+     
       var row = $('<div class="playlist-track">' + row_inner + '</div>');
       row.appendTo('#playlists-tracks-container');
-      var track_features = getFeatures(track);
+      getFeatures(track.id);    
     });
   });
   
