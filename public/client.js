@@ -59,6 +59,7 @@ function getFeatures(id) {
           scales: {
             yAxes: [{
               label: {
+                fontColor: 'blue',
                 display: true,
                 color: 'yellow',
               },
@@ -85,12 +86,6 @@ function getFeatures(id) {
 }
 
   $.get('/category-playlists', function(data) {
-    // "Data" is the object we get from the API. See server.js for the function that returns it.
-    console.group('%cResponse from /category-playlists', 'color: #F037A5; font-size: large');
-    console.log(data);
-    console.groupEnd();
-    
-    // Display the covers of the playlists
     data.items.map(function(playlist, i) {
       var img = $('<img class="cover-image"/>');
       img.attr('src', playlist.images[0].url);
@@ -122,11 +117,6 @@ function getFeatures(id) {
   }
   
   $.get('/playlists-tracks', function(data) {
-    // "Data" is the object we get from the API. See server.js for the function that returns it.
-    console.group('%cResponse from /playlists-tracks', 'color: #F037A5; font-size: large');
-    console.log(data);
-    console.groupEnd();
-    
     var playlist_id = '4VDQkvZhZbpuXKLiS99yk7'
     var options = {};
     var callback = {};
@@ -158,13 +148,12 @@ function getFeatures(id) {
     console.log(data);
     console.groupEnd();
     
-    // The audio features we want to show
     var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
     
     // Display the audio features
     keys.map(function(key, i) {
       if (data.hasOwnProperty(key)) {
-        var feature = $('<p><span class="big-number">' + data[key] + ' </span>'  + key + '</p>');
+        var feature = $('<p style="#ffffff"><span class="big-number">' + data[key] + ' </span>'  + key + '</p>');
         feature.appendTo('#audio-features-container');
       }
     });
