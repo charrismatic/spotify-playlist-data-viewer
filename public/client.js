@@ -4,109 +4,109 @@ function drawFeatures(data) {
   const values = data.values;
   const ctx = data.ctx;
   
-      var myChart = new Chart(ctx, {
-        type: 'horizontalBar',
-        backgroundColor: '#000000',
-         data: {        
-          labels: labels,
-          datasets: [{
-            data: values,
-            backgroundColor: [
-              'rgba(30,215,96, 0.6)',
-              'rgba(245,115,160, 0.6)',
-              'rgba(80,155,245, 0.6)',
-              'rgba(255,100,55, 0.6)',
-              'rgba(180,155,200, 0.6)',
-              'rgba(250,230,45, 0.6)',
-              'rgba(27, 249, 219, 0.6)',
-              'rgba(175,40,150, 0.6)',
-              'rgba(30,50,100, 0.6)',
-            ],
-            borderColor: [
-              'rgba(30,215,96, 0)',
-              'rgba(245,115,160, 0)',
-              'rgba(80,155,245, 0)',
-              'rgba(255,100,55, 0)',
-              'rgba(180,155,200,10)',
-              'rgba(250,230,45, 0)',
-              'rgba(0,100,80, 0)',
-              'rgba(175,40,150, 0)',
-              'rgba(30,50,100, 0)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        chart: {
-           backgroundColor: '#000000',
-        },
-         options: { 
-          scaleLabel: {
+  var myChart = new Chart(ctx, {
+    type: 'horizontalBar',
+    backgroundColor: '#000000',
+    data: {        
+      labels: labels,
+      datasets: [{
+        data: values,
+        backgroundColor: [
+          'rgba(30,215,96, 0.6)',
+          'rgba(245,115,160, 0.6)',
+          'rgba(80,155,245, 0.6)',
+          'rgba(255,100,55, 0.6)',
+          'rgba(180,155,200, 0.6)',
+          'rgba(250,230,45, 0.6)',
+          'rgba(27, 249, 219, 0.6)',
+          'rgba(175,40,150, 0.6)',
+          'rgba(30,50,100, 0.6)',
+        ],
+        borderColor: [
+          'rgba(30,215,96, 0)',
+          'rgba(245,115,160, 0)',
+          'rgba(80,155,245, 0)',
+          'rgba(255,100,55, 0)',
+          'rgba(180,155,200,10)',
+          'rgba(250,230,45, 0)',
+          'rgba(0,100,80, 0)',
+          'rgba(175,40,150, 0)',
+          'rgba(30,50,100, 0)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    chart: {
+      backgroundColor: '#000000',
+    },
+    options: { 
+      scaleLabel: {
+        display: true,
+      },
+      legend: { display: false },
+      scales: {
+        yAxes: [{
+          padding: .5,
+          label: {
+            padding: .5,
+            lineHeight: .5,
             display: true,
           },
-          legend: { display: false },
-          scales: {
-            yAxes: [{
-              padding: .5,
-              label: {
-              padding: .5,
-              lineHeight: .5,
-                display: true,
-              },
-              gridLines: {
-                display: false ,
-                color: "#FFFFFF"
-              },
-              ticks: {
-                lineHeight: .5,
-                fontColor:'#ffffff',
-              }
-            }],
-            xAxes: [{
-              label: [{
-                fontStyle: 'normal',
-                fontColor:'#ffffff',
-              }],
-              gridLines: {
-                 color: "#FFFFFF"
-              },
-              ticks: {
-                fontStyle: 'normal',
-                fontColor:'#ffffff',
-                beginAtZero:true,
-                max: 1
-              }
-            }]
+          gridLines: {
+            display: false ,
+            color: "#FFFFFF"
+          },
+          ticks: {
+            lineHeight: .5,
+            fontColor:'#ffffff',
           }
-        }
-      });
+        }],
+        xAxes: [{
+          label: [{
+            fontStyle: 'normal',
+            fontColor:'#ffffff',
+          }],
+          gridLines: {
+            color: "#FFFFFF"
+          },
+          ticks: {
+            fontStyle: 'normal',
+            fontColor:'#ffffff',
+            beginAtZero:true,
+            max: 1
+          }
+        }]
+      }
+    }
+  });
 }
 
 function getFeatures(id) {
-  let query = '/features?id=' + id;
+  const query = `/features?id=${id}`;
+  const selector = `#ft-${id}.features-chart`;  
+  const _chart = document.querySelector(selector);
   
   $.get(query, function(data) {
-    let _labels = [];
-    let _values = [];
+    let _labels=[];
+    let _values=[];
     
     for (var feature in data) {
-      if (data.hasOwnProperty(feature) && feature !== 'key' && feature !== 'mode') {
+      if (data.hasOwnProperty(feature)
+        && feature !== 'key' 
+        && feature !== 'mode') {
+        
         if(data[feature] <= 1 && data[feature] >= 0) {
           _labels.push(feature);
           _values.push(data[feature]);
         }
       }
     }
-
-    const chart_selector = `#ft-${id}.features-chart`;
-    const _chart = document.querySelector(chart_selector);
-
+    
     drawFeatures({
       labels: _labels,
       values: _values,
       ctx: _chart,
     });
-    
-
   });
 }
 
@@ -160,13 +160,13 @@ function drawAnalysis(_track) {
     const time = (clickEvent.offsetX / chart.width) * data.track.duration * 2;
     const kind = getFloorRowPosition(clickEvent.offsetY * 2 , rowHeight);
 
-//     const seekTime = binaryIndexOf.call(  
-//       arrayLikes[kind], 
-//       time, 
-//       e => e.start, 
-//       (element, index) => element
-//     );
-    
+    //     const seekTime = binaryIndexOf.call(  
+    //       arrayLikes[kind], 
+    //       time, 
+    //       e => e.start, 
+    //       (element, index) => element
+    //     );
+
     // fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${Math.floor(seekTime*1000)}`, {
     //   method: "PUT",
     //   headers: {
