@@ -1,9 +1,5 @@
 // client-side js
 // run by the browser each time your view template is loaded
-
-
-// client-side js
-// run by the browser each time your view template is loaded
 function getFeatures(id) {
   let query = '/features?id=' + id;
 
@@ -20,7 +16,7 @@ function getFeatures(id) {
       }
     }
   
-    var ctx = $(`$#{id}.features-chart`);
+    var ctx = $('#'+id+'.features-chart');
     
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -104,6 +100,21 @@ $(function() {
       img.appendTo('#category-playlists-container');
     });
   });
+  
+  
+  function formatTrack(track){
+    album
+    name
+    artists
+    popularity
+    id
+    preview_url
+    href
+    explicit
+    duration_ms
+    uri
+
+  }
   
   
   $.get('/playlists-tracks', function(data) {
