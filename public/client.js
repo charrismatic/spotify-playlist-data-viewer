@@ -55,10 +55,17 @@ $(function() {
     data.items.map(function(item, i) {
       var track = JSON.stringify(item.track);
       var row_inner = `<div class="track-details"><p>${track}</p></div>`;
-      var row_inner = row_inner + `<canvas class="features-chart" width="400" height="200"></canvas>`;
-      var track_features = getFeatures(track);
+      
+      var row_content = `track: ${track.name}`;
+      var row_content = row_content + `artists: ${track.artists}`;
+      var row_content = row_content + `popularity: ${track.popularity}`;
+      
+      var row_inner = row_inner + `<canvas id="${track.id}" class="features-chart" width="400" height="200"></canvas>`;
+      
+      
       var row = $('<div class="playlist-track" style="display:flex;">' + row_inner + '</div>');
       row.appendTo('#playlists-tracks-container');
+      var track_features = getFeatures(track);
     });
   });
   

@@ -16,7 +16,7 @@ function getFeatures(id) {
       }
     }
   
-    var ctx = $(`${id}.features-chart`);
+    var ctx = $(`$#{id}.features-chart`);
     
     var myChart = new Chart(ctx, {
         type: 'bar',
