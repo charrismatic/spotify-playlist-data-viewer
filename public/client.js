@@ -20,9 +20,11 @@ function getFeatures(id) {
     
        var myChart = new Chart(ctx, {
         type: 'horizontalBar',
-        data: {
+        backgroundColor: '#000000',
+         data: {        
           labels: labels,
           datasets: [{
+
             data: values,
             backgroundColor: [
               'rgba(30,215,96, 0.2)',
@@ -31,9 +33,9 @@ function getFeatures(id) {
               'rgba(255,100,55, 0.2)',
               'rgba(180,155,200, 0.2)',
               'rgba(250,230,45, 0.2)',
-              'rgba(0,100,80, 0.2)',
+              'rgba(190,100,80, 0.2)',
               'rgba(175,40,150, 0.2)',
-              'rgba(30,50,100, 0.2)'
+              'rgba(30,50,100, 02)'
             ],
             borderColor: [
               'rgba(30,215,96, 1)',
@@ -49,7 +51,10 @@ function getFeatures(id) {
             borderWidth: 1
           }]
         },
-        options: { 
+        chart: {
+           backgroundColor: '#000000',
+        },
+         options: { 
           scaleLabel: {
             display: true,
           },

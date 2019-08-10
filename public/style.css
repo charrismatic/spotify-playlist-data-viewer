@@ -48,11 +48,17 @@ p.big-number {
   flex-direction: column;
   flex-wrap: wrap;
   max-height: 30vh;
+  background-color: #000000;
 }
 
 #results li {
   text-decoration: underline;
   cursor: pointer;
+}
+
+.features-chart {
+  background-color: #000000;
+  padding: 2em 1em 1em; 
 }
 
 @media screen and (max-width: 900px) {
