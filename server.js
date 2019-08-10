@@ -138,6 +138,17 @@ app.get('/user', function (request, response) {
 });
 
 
+app.get("/features", function (request, response) {
+  spotifyApi.getAudioFeaturesForTrack(request.query.id)
+  .then(function(data) {
+    console.log(data.body);
+    response.send(data.body);
+  }, function(err) {
+    console.log(err)
+  });
+});
+
+
 //-------------------------------------------------------------//
 //------------------------ WEB SERVER -------------------------//
 //-------------------------------------------------------------//

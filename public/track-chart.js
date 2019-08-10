@@ -1,8 +1,5 @@
 // client-side js
 // run by the browser each time your view template is loaded
-
-var ctx = $("#features-chart");
-
 function getFeatures(id) {
   let query = '/features?id=' + id;
 
@@ -19,6 +16,8 @@ function getFeatures(id) {
       }
     }
   
+    var ctx = $(`${id}.features-chart`);
+    
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {

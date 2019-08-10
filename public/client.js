@@ -53,18 +53,18 @@ $(function() {
     
     // Display the tracks of the playlists
     data.items.map(function(item, i) {
-
-      var track_text = JSON.stringify(item.track);
-      var row_inner = `<div class="track-details"><p>${track_text}</p></div>`;
-      var row = $('<div class="playlist-track"/>' + row_inner + '</div>');
+      var track = JSON.stringify(item.track);
+      var row_inner = `<div class="track-details"><p>${track}</p></div>`;
+      var row_inner = row_inner + `<canvas class="features-chart" width="400" height="200"></canvas>`;
+      var track_features = getFeatures(track);
+      var row = $('<div class="playlist-track" style="display:flex;">' + row_inner + '</div>');
       row.appendTo('#playlists-tracks-container');
-      row_inner.appendTo('#playlists-tracks-container');
     });
   });
   
   
   
-  $.get('/audio-features', function(data) {
+  $.get('/features', function(data) {
     // "Data" is the object we get from the API. See server.js for the function that returns it.
     console.group('%cResponse from /audio-features', 'color: #F037A5; font-size: large');
     console.log(data);
