@@ -59,6 +59,19 @@ app.get('/search-track', function (request, response) {
     });
 });
 
+
+app.get('/playlists-tracks', function (request, response) {
+   spotifyApi.getPlaylistsForCategory('holidays', { limit : 10, country: 'SE' })
+    .then(function(data) {
+    
+    // Send the list of playlists
+    response.send(data.body.playlists);
+    
+  }, function(err) {
+    console.error(err);
+  });
+});
+
 app.get('/category-playlists', function (request, response) {
   
   // Get playlists from a browse category

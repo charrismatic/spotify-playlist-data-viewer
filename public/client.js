@@ -40,6 +40,24 @@ $(function() {
     });
   });
   
+  
+  $.get('/playlists-tracks', function(data) {
+    // "Data" is the object we get from the API. See server.js for the function that returns it.
+    console.group('%cResponse from /playlists-tracks', 'color: #F037A5; font-size: large');
+    console.log(data);
+    console.groupEnd();
+    
+    // Display the tracks of the playlists
+    data.items.map(function(playlist, i) {
+      var row = $('<div class="playlist-track"/>');
+      var data = JSON.stringify(playlist.items[0].track)
+      row.innerText = data;
+      row.appendTo('#category-playlists-container');
+    });
+  });
+  
+  
+  
   $.get('/audio-features', function(data) {
     // "Data" is the object we get from the API. See server.js for the function that returns it.
     console.group('%cResponse from /audio-features', 'color: #F037A5; font-size: large');
