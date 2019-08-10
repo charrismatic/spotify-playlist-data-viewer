@@ -149,6 +149,17 @@ app.get("/features", function (request, response) {
 });
 
 
+app.get("/analysis", function (request, response) {
+  reAuthenticateOnFailure((failure) => {
+    spotifyApi.getAudioAnalysisForTrack(request.query.id)
+    .then(function(data) {
+      response.send(data.body);
+    }, failure);
+  });
+});
+
+
+
 //-------------------------------------------------------------//
 //------------------------ WEB SERVER -------------------------//
 //-------------------------------------------------------------//

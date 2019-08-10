@@ -17,8 +17,7 @@ function getFeatures(id) {
     }
   
     var ctx = $('#'+id+'.features-chart');
-    
-       var myChart = new Chart(ctx, {
+    var myChart = new Chart(ctx, {
         type: 'horizontalBar',
         backgroundColor: '#000000',
          data: {        
@@ -98,6 +97,10 @@ function getFeatures(id) {
 
   });
 }
+
+
+
+
 
   $.get('/category-playlists', function(data) {
     data.items.map(function(playlist, i) {
