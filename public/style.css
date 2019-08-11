@@ -75,3 +75,10 @@ p.big-number {
     max-height: 20vh;
   }
 }
+
+canvas {
+   max-width: 100%;
+}
+canvas.sound-chart {
+  height: 150px;
+}

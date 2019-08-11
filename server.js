@@ -101,7 +101,7 @@ app.get('/playlists-tracks', function (request, response) {
   var playlist_user = 'mjharris2407';
   var playlist_id = '4VDQkvZhZbpuXKLiS99yk7';
 
-  spotifyApi.getPlaylistTracks(playlist_user, playlist_id, {offset: 1,limit: 5,fields: 'items'})
+  spotifyApi.getPlaylistTracks(playlist_user, playlist_id, {offset: 1,limit: 1,fields: 'items'})
   .then(function(data) {
     response.send(data.body);
   }, function(err) {

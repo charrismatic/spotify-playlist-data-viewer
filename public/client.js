@@ -1,3 +1,133 @@
+function drawSoundCharts(_track) {
+  const id = _track.id;
+  const data = _track.data;
+  
+  const amp_selector = `#sc-amp-${id}.sound-chart`;
+  const key_selector = `#sc-key-${id}.sound-chart`;
+  const tempo_selector = `#sc-tempo-${id}.sound-chart`;
+  
+  let loudnessCtx = document.querySelector( amp_selector ).getContext('2d');
+  let keyCtx = document.querySelector( key_selector ).getContext('2d');
+  let tempoCtx = document.querySelector( tempo_selector ).getContext('2d');
+  
+  function updateChartData(chart, data) {
+    chart.data.datasets[0].data = data;
+    chart.update();
+  }
+  
+  let loudnessChart = new Chart(loudnessCtx, {
+      type: 'scatter',
+      data: {
+        datasets: [{
+          label: 'Loudness',
+          borderColor: '#1ED760',
+          showLine: true,
+        }],
+      },
+      options: {
+        title: {
+          display: true,
+          text: 'Loudness',
+          position: 'top',
+          fontColor: '#fff',
+        },
+        legend: {
+          display: true, 
+        },
+        scales: {
+          yAxes: [{
+            scaleLabel: {
+              labelString: 'test12',
+            },
+            label: {
+              padding: .5,
+              lineHeight: .5,
+              display: true,
+            },
+            gridLines: {
+              display: true ,
+              color: "#FFFFFF"
+            },
+            ticks: {
+                lineHeight: 1,
+                fontColor:'#ffffff',
+                min: 0,
+                max: -80,
+                stepSize: 10,
+            }
+          }],
+          xAxes: [{
+            label: [{
+              fontStyle: 'normal',
+              fontColor:'#ffffff',
+            }],
+            gridLines: {
+              color: "#FFFFFF"
+            },
+            ticks: {
+              fontStyle: 'normal',
+              fontColor:'#ffffff',
+            }
+          }]
+       }
+    }
+  }
+);
+
+// let keyChart = new Chart(keyCtx, {
+//   type: 'line',
+//   title: 'Key',
+//   borderWidth: 1,
+//   scales: {
+//     scaleLabel: 'test',
+//     yAxes: {
+//       scaleLabel: {
+//        labelString: 'test12',
+//       },
+//       label: 'here',
+//       min: 0,
+//       max: 11,
+//       stepSize: 3,
+
+//     },
+//   },
+//   fill: false,
+//   stepped: "middle",
+// });
+
+
+// let tempoChart = new Chart(tempoCtx, {
+//   type: 'scatter',
+//   title: 'Tempo',
+//   borderWidth: 3,
+//   scales: {
+//     scaleLabel: 'Tempo',
+//     yAxes: {
+//       scaleLabel: {
+//        labelString: 'Tempo12',
+//       },
+//       label: 'here',
+//       min: 0,
+//       max: 11,
+//       stepSize: 3,
+//     },
+//   },
+//   fill: false,
+//   stepped: "after",
+// });
+  
+  
+  var new_set = data.segments.map(({start: x, loudness_start: y }) => ({ x, y }));
+  console.log(new_set);
+  updateChartData(loudnessChart, data.segments.map(({start: x, loudness_start: y }) => ({ x, y })))
+  
+  
+
+  // updateChartData(keyChart, data.sections.map(({ start: x, key: y }) => ({ x, y })))
+  // updateChartData(tempoChart, data.sections.map(({ start: x, tempo: y }) => ({ x, y })))
+}
+
+
 
 function drawFeatures(data) {
   const labels = data.labels;
@@ -7,7 +137,7 @@ function drawFeatures(data) {
   var myChart = new Chart(ctx, {
     type: 'horizontalBar',
     backgroundColor: '#000000',
-    data: {        
+    data: {
       labels: labels,
       datasets: [{
         data: values,
@@ -39,10 +169,9 @@ function drawFeatures(data) {
     chart: {
       backgroundColor: '#000000',
     },
-    options: { 
-      scaleLabel: {
-        display: true,
-      },
+    options: {
+      aspectRatio: 5,
+      scaleLabel: { display: true, },
       legend: { display: false },
       scales: {
         yAxes: [{
@@ -82,42 +211,12 @@ function drawFeatures(data) {
 }
 
 
-function getFeatures(id) {
-  const query = `/features?id=${id}`;
-  const selector = `#ft-${id}.features-chart`;  
-  const _chart = document.querySelector(selector);
-  
-  $.get(query, function(data) {
-    let _labels=[];
-    let _values=[];
-    
-    for (var feature in data) {
-      if (data.hasOwnProperty(feature)
-        && feature !== 'key' 
-        && feature !== 'mode') {
-        
-        if(data[feature] <= 1 && data[feature] >= 0) {
-          _labels.push(feature);
-          _values.push(data[feature]);
-        }
-      }
-    }
-    
-    drawFeatures({
-      labels: _labels,
-      values: _values,
-      ctx: _chart,
-    });
-  });
-}
-
-
-
 function drawAnalysis(_track) {
   let id = _track.id;
-  let data = _track.data; 
+  let data = _track.data;
   var img = new Image;
-  let deviceId = '';
+  // let deviceId = '';
+  const aspectRatio = 2;
   const colors = [
     'rgba(30,215,96, 0.9)',
     'rgba(245,115,160, 0.9)',
@@ -127,19 +226,25 @@ function drawAnalysis(_track) {
     'rgba(250,230,45, 0.9)',
     'rgba(0,100,80, 0.9)',
     'rgba(175,40,150, 0.9)',
-    'rgba(30,50,100, 0.9)'
-  ]
+    'rgba(30,50,100, 0.9)',
+  ];
+  
+  const chart_selector = `#an-${id}.analysis-chart`;
+  const analysisChart = document.querySelector(chart_selector);
+  
   
   function binaryIndexOf(searchElement, valueof, valueout) {
     var minIndex = 0;
     var maxIndex = this.length - 1;
     var currentIndex;
     var currentElement;
+    
+    
     while (minIndex <= maxIndex) {
       currentIndex = (minIndex + maxIndex) / 2 | 0;
       currentElement = valueof(this[currentIndex]);
       
-      if (currentElement < searchElement && ((currentIndex + 1 < this.length) 
+      if (currentElement < searchElement && ((currentIndex + 1 < this.length)
       ? valueof(this[currentIndex+1]) : Infinity) > searchElement) {
         return valueout(currentElement, currentIndex, this);
       }
@@ -148,8 +253,8 @@ function drawAnalysis(_track) {
         minIndex = currentIndex + 1;
       } else if (currentElement > searchElement) {
         maxIndex = currentIndex - 1;
-      } else { 
-        return this[currentIndex]; 
+      } else {
+        return this[currentIndex];
       }
     }
     return -1;
@@ -159,23 +264,11 @@ function drawAnalysis(_track) {
     var chart = clickEvent.target;
     const time = (clickEvent.offsetX / chart.width) * data.track.duration * 2;
     const kind = getFloorRowPosition(clickEvent.offsetY * 2 , rowHeight);
-    //     const seekTime = binaryIndexOf.call(  
-    //       arrayLikes[kind], 
-    //       time, 
-    //       e => e.start, 
-    //       (element, index) => element
-    //     );
-    // fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${Math.floor(seekTime*1000)}`, {
-    //   method: "PUT",
-    //   headers: {
-    //     'Authorization': `Bearer ${accessToken}`
-    //   }
-    // }).catch(console.log);
   }
   
   const getCurrentAndLastArrayLikes = (arrayLikes, time) => {
     arrayLikes.map(arrayLike => {
-      binaryIndexOf.call(arrayLike, time, e => e.start, 
+      binaryIndexOf.call(arrayLike, time, e => e.start,
         (element, index, array) => ([
           array[index],
           array[index > 0 ? index - 1 : 0]
@@ -185,20 +278,15 @@ function drawAnalysis(_track) {
   };
   
   const getRowPosition = index => index === 0 ? 0 : 1 / index + getRowPosition(index-1);
-  const getFloorRowPosition = ( searchPosition, rowHeight, i=0, max=5) => i > max 
-      ? max : searchPosition < (getRowPosition(i+1) * rowHeight) 
-      ? i : getFloorRowPosition(searchPosition, rowHeight, i+1, max);
+  const getFloorRowPosition = (searchPosition, rowHeight, i=0, max=5) => i > max ? max : searchPosition < (getRowPosition(i+1) * rowHeight) ? i : getFloorRowPosition(searchPosition, rowHeight, i+1, max);
   
-  const chart_selector = `#an-${id}.analysis-chart`;
-  const analysisChart = document.querySelector(chart_selector);
+  analysisChart.width = analysisChart.parentElement.offsetWidth;
+  analysisChart.style.width = `${analysisChart.width}px`;
+  analysisChart.height = (analysisChart.width / aspectRatio);
+  analysisChart.style.height = `${analysisChart.height}px`;
   
-  analysisChart.style.width = analysisChart.offsetWidth;
-  analysisChart.width = analysisChart.offsetWidth * 2;
-  analysisChart.style.height = analysisChart.offsetHeight;
-  analysisChart.height = analysisChart.offsetHeight * 2;
-  
-  const width = analysisChart.width;
-  const height = analysisChart.height;
+  const width  = analysisChart.width;
+  const height = analysisChart.height * 2;
   const ctx = analysisChart.getContext("2d");
   
   const arrayLikesEntries = Object.entries(data)
@@ -207,48 +295,55 @@ function drawAnalysis(_track) {
   
   const arrayLikesKeys = arrayLikesEntries.map(entry => entry[0]);
   const arrayLikes = arrayLikesEntries.map(entry => entry[1]);
-  const rowHeight = height / arrayLikes.length;
+  var rowHeight = height / arrayLikes.length;
   
   analysisChart.addEventListener('click', analysisChartClickHanlder);
-
   arrayLikes.forEach((arrayLike, arrayLikeIndex) => {
     const startY = getRowPosition(arrayLikeIndex) * rowHeight;
     const arrayLikeHeight = rowHeight / (arrayLikeIndex + 1);
     arrayLike.forEach((section, sectionIndex) => {
       ctx.fillStyle = colors[sectionIndex % colors.length];
       ctx.fillRect(
-        section.start/data.track.duration*width,
+        section.start / data.track.duration * width,
         getRowPosition(arrayLikeIndex) * rowHeight,
-        section.duration/data.track.duration*width,
+        section.duration / data.track.duration * width,
         arrayLikeHeight
       );
     });
-
-      const label = arrayLikesKeys[arrayLikeIndex].charAt(0).toUpperCase() 
-          + arrayLikesKeys[arrayLikeIndex].slice(1)
-
-      ctx.fillStyle = "#000";
-      ctx.font = `bold ${arrayLikeHeight}px Circular`;
-      ctx.fillText(label,0,startY + arrayLikeHeight);
-    });
     
-    const markerHeight = getRowPosition(arrayLikes.length) * rowHeight;
-
-    function provideAnimationFrame(timestamp) {
-      player && player.getCurrentState().then(state => {
+    
+    const label = arrayLikesKeys[arrayLikeIndex].charAt(0).toUpperCase()
+    + arrayLikesKeys[arrayLikeIndex].slice(1)
+    
+    ctx.fillStyle = "#000";
+    ctx.font = `bold ${arrayLikeHeight}px Circular`;
+    ctx.fillText(label,0,startY + arrayLikeHeight);
+    
+  });
+  
+  
+  const markerHeight = getRowPosition(arrayLikes.length) * rowHeight;
+  
+  function provideAnimationFrame(timestamp) {
+    var player = false;
+    if (player) {
+      var state = player.getCurrentState();
+      if (state) {
         const position = state.position/1000/data.track.duration*width
         const currentAndLastArrayLikes = getCurrentAndLastArrayLikes(arrayLikes, state.position/1000);
         const pitchChanges = currentAndLastArrayLikes[3][0].pitches.map((pitch, index) => Math.abs(pitch - currentAndLastArrayLikes[3][1].pitches[index]));
         const timbreChanges = currentAndLastArrayLikes[3][0].timbre.map((timbre, index) => Math.abs(timbre - currentAndLastArrayLikes[3][1].timbre[index]));
         const pitchBoxWidth = 60;
-
+        
+        const _width = analysisChart.width;
+        const _height = analysisChart.height;
+        
         ctx.fillStyle = "#000";
         ctx.strokeStyle = "#AAA";
-
-        ctx.clearRect(0, 0, analysisChart.width, analysisChart.height);
+        ctx.clearRect(0, 0, _width, _height);
         ctx.drawImage(img,0,0);
         ctx.fillRect(position-2, 0, 5, markerHeight);
-
+        
         pitchChanges.forEach((pitchChange, i) => {
           ctx.fillStyle = `hsl(0, 0%, ${pitchChange * 100}%)`;
           ctx.fillRect(
@@ -289,19 +384,53 @@ function drawAnalysis(_track) {
           );
         });
         
-      window.requestAnimationFrame(provideAnimationFrame);
-    }).catch(e => {
-      console.error("Animation: ", e);
-      window.requestAnimationFrame(provideAnimationFrame);
-    });
+        window.requestAnimationFrame(provideAnimationFrame);
+      }
+    }
+    
+    // }).catch(e => {
+    //   console.error("Animation: ", e);
+    //   window.requestAnimationFrame(provideAnimationFrame);
+    // });
   }
-
+  
   window.requestAnimationFrame(provideAnimationFrame);
   img.src = analysisChart.toDataURL('png');
 }
+
+
+
+function getFeatures(id) {
+  const query = `/features?id=${id}`;
+  const selector = `#ft-${id}.features-chart`;
+  const _chart = document.querySelector(selector);
   
-  
-  
+  $.get(query, function(data) {
+    let _labels=[];
+    let _values=[];
+    
+    for (var feature in data) {
+      if (data.hasOwnProperty(feature)
+      && feature !== 'key'
+      && feature !== 'mode') {
+        
+        if(data[feature] <= 1 && data[feature] >= 0) {
+          _labels.push(feature);
+          _values.push(data[feature]);
+        }
+      }
+    }
+    
+    // drawFeatures({
+    //   labels: _labels,
+    //   values: _values,
+    //   ctx: _chart,
+    // });
+    
+  });
+}
+
+
 
 function flattenArtists(artists){
   var result = [];
@@ -327,66 +456,72 @@ function flattenTrack(track) {
   };
 }
 
+
 function getTrackHtml(track) {
- var output = `
- <section class="features">
+  var output = `
+  <section class="features">
   <div class="track-details">
-    <dl>
-      <dt>track:</dt>
-      <dd>${track.name}</dd>
-      <dt>artists:</dt>
-      <dd>${track.artists}<dd/>
-      <dt>popularity:<dt>
-      <dd>${track.popularity}<dd/>
-    </dl>
+  <dl>
+  <dt>track:</dt>
+  <dd>${track.name}</dd>
+  <dt>artists:</dt>
+  <dd>${track.artists}<dd/>
+  <dt>popularity:<dt>
+  <dd>${track.popularity}<dd/>
+  </dl>
   </div>
-  <ul id="results"></ul>
+  <ul class="results-list"></ul>
   <p id="features"></p>
-  <div id="charts-container">
+  <div class="charts-container">
+  <div style="background:black;padding:0 1rem;">
     <canvas id="ft-${track.id}" class="features-chart" width="400" height="150"></canvas>
-    <canvas id="an-${track.id}" class="analysis-chart" width="300" height="150"></canvas>
+    <canvas id="an-${track.id}" class="analysis-chart" width="400" height="150"></canvas>
+    <canvas id="sc-amp-${track.id}" class="sound-chart"></canvas>
+    <canvas id="sc-key-${track.id}" class="sound-chart"></canvas>
+    <canvas id="sc-tempo-${track.id}" class="sound-chart"></canvas>
+  <div>
   </div>
   </section>`;
+  
   return output;
 }
+
+
+function getAnalysis(id) {
+  let query = '/analysis?id=' + id;
+  
+  return fetch(query)
+  .then(e => e.json())
+  .then( _data => {
+    drawAnalysis({
+      data: _data,
+      id: id,
+    });
+   
+    drawSoundCharts({
+      data: _data,
+      id: id,
+    });
+  });
+};
+
 
 $.get('/playlists-tracks', function(data) {
   var playlist_id = '4VDQkvZhZbpuXKLiS99yk7'
   var options = {};
   var callback = {};
-
+  
   data.items.map(function(item, i) {
     var track = flattenTrack(item.track);
-    var content = getTrackHtml(track);       
+    var content = getTrackHtml(track);
     var row = $(`<div class="playlist-track">\n${content}\n</div>`);
     row.appendTo('#playlists-tracks-container');
-
+    
     getFeatures(track.id);
     getAnalysis(track.id);
   });
 });
 
-function getAnalysis(id) {
-  let query = '/analysis?id=' + id;
-  
-  return fetch(query).then(e => e.json()).then(_data => {
-    drawAnalysis({
-      data: _data,
-      id: id,
-    });
-    // fetch(`https://api.spotify.com/v1/me/player/play${deviceId && `?device_id=${deviceId}`}`, {
-    //     method: "PUT",
-    //     body: JSON.stringify({"uris": [`spotify:track:${id}`]}),
-    //     headers: {
-    //       'Authorization': `Bearer ${accessToken}`
-    //     }
-    //   }).catch(e => console.error(e));
-  });
-}
-
-// $.get('/analysis', function(data) {
-//   return drawAnalysis(data)
-// });
 
 $.get('/features', function(data) {
   var keys = ["danceability", "energy", "acousticness", "tempo", "instrumentalness"]
@@ -403,16 +538,12 @@ $.get('/features', function(data) {
 //   var img = $('<img class="circle-image" />');
 //   img.attr('src', data.images[0].url);
 //   img.appendTo('#artist-container');
-
 //   var trackName = $('<h3>' + data.name + '</h3>');
 //   trackName.appendTo('#artist-container');
-
 //   var trackName = $('<h3>Popularity: ' + data.popularity + '</h3>');
 //   trackName.appendTo('#artist-container');
-
 //   var trackName = $('<h3>Followers: ' + data.followers.total + '</h3>');
 //   trackName.appendTo('#artist-container');
-
 //   data.genres.map(function(genre, i) {
 //     var genreItem = $('<p>' + genre + '</p>');
 //     genreItem.appendTo('#artist-container');
